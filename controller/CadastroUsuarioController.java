@@ -25,12 +25,12 @@ public class CadastroUsuarioController implements Observer {
         view.solicitarSenha();
 
         while (view.getSenha1().length() < 6) {
-            view.mensagem("A senha deve ter no minimo 6 digitos!");
+            view.failMensage("A senha deve ter no minimo 6 digitos!");
             view.solicitarSenha();
         }
 
         while (!view.getSenha1().equals(view.getSenha2())) {
-            view.mensagem("As senhas devem coincidir!");
+            view.failMensage("As senhas devem coincidir!");
             view.solicitarSenha();
         }
 
@@ -40,28 +40,12 @@ public class CadastroUsuarioController implements Observer {
             this.senha = view.getSenha1();
 
             model.adicionarUsuario(nome, email, senha);
-            view.mensagem("Cadastro efetuado com sucesso!");
+            view.sucessMensage("Cadastro efetuado com sucesso!");
 
         } catch (RuntimeException e) {
-            view.mensagem("Erro: " + e.getMessage());
+            view.failMensage("Erro: " + e.getMessage());
         }
 
-        view.opcao();
-    }
-
-    public void handleEvent(String event) {
-        switch (event) {
-            case "1":
-                break;
-            case "2":
-                CadastroUsuarioView viewNova = new CadastroUsuarioView();
-                viewNova.init(model);
-                break;
-            default:
-                view.mensagem("Opção inválida. Tente novamente!");
-                view.opcao();
-                break;
-        }
     }
 
     @Override

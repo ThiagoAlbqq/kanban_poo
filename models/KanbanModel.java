@@ -1,6 +1,5 @@
 package models;
 
-import models.UsuarioEntity;
 import view.Observer;
 
 import java.io.*;
@@ -12,6 +11,8 @@ public class KanbanModel implements Serializable {
     private static KanbanModel instanciaUnica;
 
     private List<UsuarioEntity> usuarios = new ArrayList<>();
+    private List<ConviteEntity> convites;
+    private List<TeamEntity> times;
     private UsuarioEntity usuarioLogado;
     private static final String NOME_ARQUIVO = "kanban_db.ser";
 
@@ -19,7 +20,9 @@ public class KanbanModel implements Serializable {
 
     private KanbanModel() {
         this.usuarios = new ArrayList<>();
+        this.times = new ArrayList<>();
         this.observers = new ArrayList<>();
+        this.convites = new ArrayList<>();
     }
 
     public static KanbanModel getInstancia() {
@@ -178,18 +181,139 @@ public class KanbanModel implements Serializable {
         throw new RuntimeException("Usuário não encontrado.");
     }
 
-    public boolean autenticarUsuario(String email, String senha) {
+    public void autenticarUsuario(String email, String senha){
         for (UsuarioEntity u : usuarios) {
             if (u.getEmail().equals(email) && u.checkPassword(senha)) {
                 this.usuarioLogado = u;
                 notifica();
-                return true;
+                return;
             }
         }
-        return false;
+        throw new IllegalStateException("Houve um erro ao efetuar o login");
+    }
+
+    public void deslogarUsuario() {
+        this.usuarioLogado = null;
     }
 
     public UsuarioEntity getUsuarioLogado() {
         return usuarioLogado;
+    }
+
+    public void criarTime(String nome) {
+        if (nome == null || nome.isEmpty()) throw new RuntimeException("Nome do time obrigatório.");
+
+        // Gera ID simples (tamanho + 1)
+        int novoId = times.size() + 1;
+
+        TeamEntity novoTime = new TeamEntity(nome, "", usuarioLogado);
+
+        // Opcional: O criador (usuário logado) já entra como membro?
+        if (usuarioLogado != null) {
+            novoTime.addMember(usuarioLogado);
+        }
+
+        times.add(novoTime);
+        salvarDados(); // Persiste tudo
+        notifica();
+    }
+
+    public String[] listarTimes() {
+        String[] lista = new String[times.size()];
+        for (int i = 0; i < times.size(); i++) {
+            TeamEntity t = times.get(i);
+            lista[i] = String.format("ID: %d | Time: %s | Membros: %d", t.getId(), t.getName(), t.getMembers().size());
+        }
+        return lista;
+    }
+
+    // Método para entrar num time (Vincula Usuario -> Time)
+    public void entrarNoTime(int idTime) {
+        if (usuarioLogado == null) throw new RuntimeException("Ninguém logado.");
+
+        TeamEntity timeAlvo = null;
+        for(TeamEntity t : times) {
+            if(t.getId() == idTime) timeAlvo = t;
+        }
+
+        if (timeAlvo == null) throw new RuntimeException("Time não encontrado.");
+
+        // Verifica se já está no time
+        if (timeAlvo.getMembers().contains(usuarioLogado)) {
+            throw new RuntimeException("Você já está neste time.");
+        }
+
+        timeAlvo.addMember(usuarioLogado);
+        salvarDados();
+        notifica();
+    }
+
+    public void enviarConvite(String emailDestinatario, int idTime) {
+        if (usuarioLogado == null) throw new RuntimeException("Ninguém logado.");
+
+        // Valida se o time existe
+        TeamEntity time = null;
+        for(TeamEntity t : times) {
+            if(t.getId() == idTime) time = t;
+        }
+        if(time == null) throw new RuntimeException("Time não encontrado.");
+
+        // Valida se o usuário existe
+        boolean usuarioExiste = false;
+        for(UsuarioEntity u : usuarios) {
+            if(u.getEmail().equalsIgnoreCase(emailDestinatario)) usuarioExiste = true;
+        }
+        if(!usuarioExiste) throw new RuntimeException("Usuário não encontrado.");
+
+        // Cria o convite
+        int idConvite = convites.size() + 1;
+        ConviteEntity convite = new ConviteEntity(
+                idConvite,
+                usuarioLogado.getEmail(),
+                emailDestinatario,
+                idTime,
+                time.getName()
+        );
+
+        convites.add(convite);
+        salvarDados();
+        notifica();
+    }
+
+    // Retorna apenas os convites PENDENTES do usuário logado
+    public String[] verificarMeusConvites() {
+        if (usuarioLogado == null) return new String[0];
+
+        List<String> meusConvites = new ArrayList<>();
+
+        for (ConviteEntity c : convites) {
+            if (c.getDestinatarioEmail().equalsIgnoreCase(usuarioLogado.getEmail())
+                    && c.getStatus().equals("PENDENTE")) {
+
+                // Formato: "ID#NOMEDOTIME#QUEMMANDOU" (Separado por # pra View quebrar depois se quiser)
+                meusConvites.add(c.getId() + "#" + c.getNomeTime() + "#" + c.getRemetenteEmail());
+            }
+        }
+        return meusConvites.toArray(new String[0]);
+    }
+
+    public void responderConvite(int idConvite, boolean aceitou) {
+        ConviteEntity alvo = null;
+        for(ConviteEntity c : convites) {
+            if(c.getId() == idConvite) alvo = c;
+        }
+
+        if(alvo == null) throw new RuntimeException("Convite não encontrado.");
+
+        if(aceitou) {
+            alvo.setStatus("ACEITO");
+            // Lógica de adicionar o usuário no time automaticamente
+            entrarNoTime(alvo.getIdTime());
+        } else {
+            alvo.setStatus("RECUSADO");
+        }
+
+        salvarDados();
+        notifica();
     }
 }

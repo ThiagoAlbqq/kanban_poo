@@ -1,22 +1,25 @@
 package view;
 
+import controller.CadastroTimeController;
 import controller.CadastroUsuarioController;
 import models.KanbanModel;
+
 import java.util.Scanner;
 
-public class CadastroUsuarioView implements Observer {
+public class CadastroTimeView implements Observer {
 
-    private String nome, email, senha1, senha2;
+
+    private String nome;
     private String opcao = "0";
 
     private KanbanModel model;
-    private CadastroUsuarioController controller;
+    private CadastroTimeController controller;
     public Scanner sc = Input.scanner;
 
     public void init(KanbanModel model) {
         if (model != null) {
             this.model = model;
-            controller = new CadastroUsuarioController();
+            controller = new CadastroTimeController();
             controller.init(model, this);
             model.attachObserver(this);
 
@@ -25,36 +28,27 @@ public class CadastroUsuarioView implements Observer {
     }
 
     public void solicitarNome() {
-        Prompt.header("DANDANDAN-KANBAN : Criar Conta");
-        nome = Prompt.input("Nome do Conta: ");
+        Prompt.header("DANDANDAN-KANBAN : Criar Time");
+        nome = Prompt.input("Nome do Time: ");
     }
-
-    public void solicitarEmail() {
-        email = Prompt.input("Email do Conta: ");
-    }
-
-    public void solicitarSenha() {
-        senha1 = Prompt.input("Senha do Conta: ");
-        senha2 = Prompt.input("Confirma senha: ");
-    }
-
-    // --- Getters para o Controller usar (Igual ao dela) ---
     public String getNome() { return nome; }
-    public String getEmail() { return email; }
-    public String getSenha1() { return senha1; }
-    public String getSenha2() { return senha2; }
 
     public void sucessMensage(String msg) {
         System.out.println(" ");
         Prompt.success(msg);
+
+        System.out.println("\nPressione Enter para continuar...");
+        Prompt.scanner.nextLine();
     }
 
     public void failMensage(String msg) {
         Prompt.error(msg);
     }
 
+
     @Override
     public void update() {
     }
+
 
 }

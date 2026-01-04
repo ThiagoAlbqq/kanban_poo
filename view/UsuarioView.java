@@ -1,5 +1,6 @@
 package view;
 
+import controller.UsuarioController;
 import models.KanbanModel;
 
 public class UsuarioView implements Observer {
@@ -18,7 +19,7 @@ public class UsuarioView implements Observer {
             controller = new UsuarioController();
             controller.init(model, this);
             model.attachObserver(this);
-            menuPrincipal();
+            mostrarMenu();
         }
     }
 
@@ -27,17 +28,33 @@ public class UsuarioView implements Observer {
     }
 
     public void mostrarMenu() {
-        do {
-            System.out.println("\n=== BEM-VINDO AO KANBAN 10 ===");
-            System.out.println("1 - Criar Usuario");
-            System.out.println("2 - Listar Usuarios");
-            System.out.println("3 - Deletar Usuario");
-            System.out.println("4 - Editar Usuario");
-            System.out.println("0 - Sair");
-            System.out.print("Opção: ");
+        boolean sair = false;
 
-            controller.handleEvent(Input.lerString());
-        } while (!terminar);
+        do {
+            Prompt.clear();
+
+            Prompt.header("Gestão de Usuários");
+
+            Prompt.menuItem("1", "Criar Novo Usuário");
+            Prompt.menuItem("2", "Listar Todos");
+            Prompt.menuItem("3", "Editar Usuário");
+            Prompt.menuItem("4", "Remover Usuário");
+            Prompt.separator();
+            Prompt.menuItem("0", "Voltar / Sair");
+
+            System.out.println();
+
+            String op = Prompt.input("Escolha uma opção");
+
+            if (op.equals("0")) {
+                sair = true;
+            } else {
+                controller.handleEvent(op);
+                System.out.println("\nPressione Enter para continuar...");
+                Prompt.scanner.nextLine();
+            }
+
+        } while (!sair);
     }
 
     @Override

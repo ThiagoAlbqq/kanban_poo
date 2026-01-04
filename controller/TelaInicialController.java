@@ -18,16 +18,10 @@ public class TelaInicialController implements Observer {
     public void handleEvent(String opcao) {
         switch (opcao) {
             case "1":
-                new CadastroUsuarioView().init(model);
+                new LoginView().init(model);
                 break;
             case "2":
-                new ListarUsuariosView().init(model);
-                break;
-            case "3":
-                new DeletarUsuarioView().init(model);
-                break;
-            case "4":
-                new EditarUsuarioView().init(model);
+                new CadastroUsuarioView().init(model);
                 break;
             case "0":
                 view.mensagem("Saindo...");

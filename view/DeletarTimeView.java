@@ -1,20 +1,20 @@
 package view;
 
+import controller.DeletarTimeController;
 import controller.DeletarUsuarioController;
 import models.KanbanModel;
 
-public class DeletarUsuarioView implements Observer {
+public class DeletarTimeView implements Observer {
 
     private int id;
-    private String opcao = "0";
 
     private KanbanModel model;
-    private DeletarUsuarioController controller;
+    private DeletarTimeController controller;
 
     public void init(KanbanModel model) {
         if (model != null) {
             this.model = model;
-            controller = new DeletarUsuarioController();
+            controller = new DeletarTimeController();
             controller.init(model, this);
             model.attachObserver(this);
 

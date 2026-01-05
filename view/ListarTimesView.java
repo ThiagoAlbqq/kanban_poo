@@ -1,37 +1,30 @@
 package view;
 
-import controller.CadastroTimeController;
-import controller.CadastroUsuarioController;
+import controller.ListarTimesController;
+import controller.ListarUsuariosController;
 import models.KanbanModel;
 
-import java.util.Scanner;
+public class ListarTimesView implements Observer {
 
-public class CadastroTimeView implements Observer {
-
-
-    private String nome;
     private String opcao = "0";
 
     private KanbanModel model;
-    private CadastroTimeController controller;
-    public Scanner sc = Input.scanner;
+    private ListarTimesController controller;
 
     public void init(KanbanModel model) {
         if (model != null) {
             this.model = model;
-            controller = new CadastroTimeController();
+            controller = new ListarTimesController();
             controller.init(model, this);
             model.attachObserver(this);
 
-            controller.cadastrar();
+            controller.listar();
         }
     }
 
-    public void solicitarNome() {
-        Prompt.header("DANDANDAN-KANBAN : Criar Time");
-        nome = Prompt.input("Nome do Time: ");
+    public void mensagem(String mensagem) {
+        System.out.println(mensagem);
     }
-    public String getNome() { return nome; }
 
     public void sucessMensage(String msg) {
         System.out.println(" ");

@@ -38,7 +38,6 @@ public class CadastroUsuarioView implements Observer {
         senha2 = Prompt.input("Confirma senha: ");
     }
 
-    // --- Getters para o Controller usar (Igual ao dela) ---
     public String getNome() { return nome; }
     public String getEmail() { return email; }
     public String getSenha1() { return senha1; }

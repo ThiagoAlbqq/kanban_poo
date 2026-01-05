@@ -14,10 +14,8 @@ public class TelaPrincipalView implements Observer {
         controller.init(model, this);
         model.attachObserver(this);
 
-        // 1. Verifica convites assim que entra (O "Pop-up")
         controller.checarNotificacoesAoEntrar();
 
-        // 2. Mostra o menu principal
         mostrarMenu();
     }
 
@@ -34,7 +32,6 @@ public class TelaPrincipalView implements Observer {
 
             Prompt.header("Dashboard de " + nomeUsuario);
 
-            // Menu organizado por contexto
             System.out.println("\u001B[36m -- TIMES -- \u001B[0m");
             Prompt.menuItem("1", "Meus Times (Acessar Quadro)");
             Prompt.menuItem("2", "Criar Novo Time");

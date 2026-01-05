@@ -1,6 +1,5 @@
 package view;
 
-import controller.DeletarUsuarioController;
 import controller.EditarUsuarioController;
 import models.KanbanModel;
 
@@ -25,24 +24,19 @@ public class EditarUsuarioView implements Observer{
     }
 
     public void solicitarId() {
-        System.out.print("Id: ");
-        id = Input.lerInt();
+        id = Prompt.inputInt("Id");
     }
 
     public void solicitarNome() {
-        System.out.println("\n--- EDITAR USUARIO ---");
-        System.out.print("Nome (Opcional): ");
-        novoNome = Input.lerString();
+        novoNome = Prompt.input("Nome");
     }
 
     public void solicitarEmail() {
-        System.out.print("Email (Opcional): ");
-        novoEmail = Input.lerString();
+        novoEmail = Prompt.input("Email");
     }
 
     public void solicitarSenha() {
-        System.out.print("Senha (Opcional): ");
-        novaSenha = Input.lerString();
+        novaSenha = Prompt.input("Senha");
     }
 
     public int getId() { return id; }
@@ -50,18 +44,13 @@ public class EditarUsuarioView implements Observer{
     public String getEmail() { return novoEmail; }
     public String getSenha() { return novaSenha; }
 
-    public void mensagem(String msg) {
-        System.out.println(">> " + msg);
-        System.out.println();
+    public void sucessMensage(String msg) {
+        System.out.println(" ");
+        Prompt.success(msg);
     }
 
-    public void opcao() {
-        System.out.println("1 - Voltar ao Menu Principal");
-        System.out.println("2 - Nova remoção3");
-        System.out.println();
-        System.out.print("Digite a opcao: ");
-        opcao = Input.lerString();
-        controller.handleEvent(opcao);
+    public void failMensage(String msg) {
+        Prompt.error(msg);
     }
 
     @Override

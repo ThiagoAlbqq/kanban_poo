@@ -203,18 +203,16 @@ public class KanbanModel implements Serializable {
     public void criarTime(String nome) {
         if (nome == null || nome.isEmpty()) throw new RuntimeException("Nome do time obrigatório.");
 
-        // Gera ID simples (tamanho + 1)
         int novoId = times.size() + 1;
 
         TeamEntity novoTime = new TeamEntity(nome, "", usuarioLogado);
 
-        // Opcional: O criador (usuário logado) já entra como membro?
         if (usuarioLogado != null) {
             novoTime.addMember(usuarioLogado);
         }
 
         times.add(novoTime);
-        salvarDados(); // Persiste tudo
+        salvarDados();
         notifica();
     }
 
@@ -227,7 +225,54 @@ public class KanbanModel implements Serializable {
         return lista;
     }
 
-    // Método para entrar num time (Vincula Usuario -> Time)
+    public void editarTime(int id, String novoNome) {
+
+        TeamEntity alvo = null;
+        for (TeamEntity t : times) {
+            if (t.getId() == id) {
+                alvo = t;
+                break;
+            }
+        }
+
+        if (alvo == null) {
+            throw new RuntimeException("Time não encontrado para edição.");
+        }
+
+        if (novoNome != null && !novoNome.isEmpty()) {
+            alvo.setName(novoNome);
+        }
+
+        salvarDados();
+        notifica();
+
+    }
+
+    // Função para deltar time dado o ID (para lideres e admins)
+    public void deletarTime(int id) {
+        if (id <= 0) {
+            throw new RuntimeException("ID inválido.");
+        }
+
+        TeamEntity alvo = null;
+
+        // TODO[]: para casos onde o cara não é admin, precisamos validar se ele é Lider da equipe
+        for (TeamEntity t : times) {
+            if (t.getId() == id) {
+                alvo = t;
+                break;
+            }
+        }
+
+        if (alvo == null) {
+            throw new RuntimeException("Time não encontrado com o ID informado.");
+        }
+
+        times.remove(alvo);
+        salvarDados();
+        notifica();
+    }
+
     public void entrarNoTime(int idTime) {
         if (usuarioLogado == null) throw new RuntimeException("Ninguém logado.");
 
@@ -238,7 +283,6 @@ public class KanbanModel implements Serializable {
 
         if (timeAlvo == null) throw new RuntimeException("Time não encontrado.");
 
-        // Verifica se já está no time
         if (timeAlvo.getMembers().contains(usuarioLogado)) {
             throw new RuntimeException("Você já está neste time.");
         }
@@ -251,21 +295,18 @@ public class KanbanModel implements Serializable {
     public void enviarConvite(String emailDestinatario, int idTime) {
         if (usuarioLogado == null) throw new RuntimeException("Ninguém logado.");
 
-        // Valida se o time existe
         TeamEntity time = null;
         for(TeamEntity t : times) {
             if(t.getId() == idTime) time = t;
         }
         if(time == null) throw new RuntimeException("Time não encontrado.");
 
-        // Valida se o usuário existe
         boolean usuarioExiste = false;
         for(UsuarioEntity u : usuarios) {
             if(u.getEmail().equalsIgnoreCase(emailDestinatario)) usuarioExiste = true;
         }
         if(!usuarioExiste) throw new RuntimeException("Usuário não encontrado.");
 
-        // Cria o convite
         int idConvite = convites.size() + 1;
         ConviteEntity convite = new ConviteEntity(
                 idConvite,
@@ -280,7 +321,6 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
-    // Retorna apenas os convites PENDENTES do usuário logado
     public String[] verificarMeusConvites() {
         if (usuarioLogado == null) return new String[0];
 
@@ -290,7 +330,6 @@ public class KanbanModel implements Serializable {
             if (c.getDestinatarioEmail().equalsIgnoreCase(usuarioLogado.getEmail())
                     && c.getStatus().equals("PENDENTE")) {
 
-                // Formato: "ID#NOMEDOTIME#QUEMMANDOU" (Separado por # pra View quebrar depois se quiser)
                 meusConvites.add(c.getId() + "#" + c.getNomeTime() + "#" + c.getRemetenteEmail());
             }
         }
@@ -307,7 +346,6 @@ public class KanbanModel implements Serializable {
 
         if(aceitou) {
             alvo.setStatus("ACEITO");
-            // Lógica de adicionar o usuário no time automaticamente
             entrarNoTime(alvo.getIdTime());
         } else {
             alvo.setStatus("RECUSADO");

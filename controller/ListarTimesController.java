@@ -1,16 +1,17 @@
 package controller;
 
 import models.KanbanModel;
-import view.DeletarUsuarioView;
+import view.ListarTimesView;
 import view.ListarUsuariosView;
 import view.Observer;
 
-public class ListarUsuariosController implements Observer {
+public class ListarTimesController implements Observer {
+
 
     private KanbanModel model;
-    private ListarUsuariosView view;
+    private ListarTimesView view;
 
-    public void init(KanbanModel model, ListarUsuariosView view) {
+    public void init(KanbanModel model, ListarTimesView view) {
         if (model != null && view != null) {
             this.model = model;
             this.view = view;
@@ -21,20 +22,20 @@ public class ListarUsuariosController implements Observer {
     public void listar() {
 
         try {
-            String[] lista = model.listarUsuarios();
+            String[] lista = model.listarTimes();
             for(String u : lista) {
                 view.mensagem(u);
             }
 
-            view.sucessMensage("Usuarios listados com sucesso!\n");
+            view.sucessMensage("Times listados com sucesso!\n");
 
         } catch (RuntimeException e) {
             view.failMensage("Erro: " + e.getMessage());
         }
-
     }
 
     @Override
     public void update() {}
-    
+
+
 }

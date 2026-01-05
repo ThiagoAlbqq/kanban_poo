@@ -1,17 +1,19 @@
 package controller;
 
 import models.KanbanModel;
-import view.DeletarUsuarioView;
+import view.EditarTimeView;
 import view.Observer;
 
-public class DeletarUsuarioController implements Observer {
+public class EditarTimeController implements Observer {
+
 
     private KanbanModel model;
-    private DeletarUsuarioView view;
+    private EditarTimeView view;
 
     private int id;
+    private String novoNome;
 
-    public void init(KanbanModel model, DeletarUsuarioView view) {
+    public void init(KanbanModel model, EditarTimeView view) {
         if (model != null && view != null) {
             this.model = model;
             this.view = view;
@@ -19,14 +21,17 @@ public class DeletarUsuarioController implements Observer {
         }
     }
 
-    public void deletar() {
+    public void editar() {
         view.solicitarId();
+        view.solicitarNome();
 
         try {
             this.id = view.getId();
+            this.novoNome = view.getNome();
 
-            model.deletarUsuario(id);
-            view.sucessMensage("Usuario deletado com sucesso!");
+            model.editarTime(id, novoNome);
+
+            view.sucessMensage("Edição efetuada com sucesso!");
 
         } catch (RuntimeException e) {
             view.failMensage("Erro: " + e.getMessage());
@@ -35,4 +40,5 @@ public class DeletarUsuarioController implements Observer {
 
     @Override
     public void update() {}
+
 }

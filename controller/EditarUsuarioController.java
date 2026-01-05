@@ -27,7 +27,7 @@ public class EditarUsuarioController implements Observer {
         view.solicitarSenha();
 
         while (!view.getSenha().isEmpty() && view.getSenha().length() < 6) {
-            view.mensagem("Se for alterar a senha, ela deve ter no minimo 6 digitos!");
+            view.failMensage("Se for alterar a senha, ela deve ter no minimo 6 digitos!");
             view.solicitarSenha();
         }
 
@@ -39,28 +39,10 @@ public class EditarUsuarioController implements Observer {
 
             model.editarUsuario(id, novoNome, novoEmail, novaSenha);
 
-            view.mensagem("Edição efetuada com sucesso!");
+            view.sucessMensage("Edição efetuada com sucesso!");
 
         } catch (RuntimeException e) {
-            view.mensagem("Erro: " + e.getMessage());
-        }
-
-        view.opcao();
-    }
-
-    public void handleEvent(String event) {
-        switch (event) {
-            case "1":
-                // Voltar
-                break;
-            case "2":
-                EditarUsuarioView viewNova = new EditarUsuarioView();
-                viewNova.init(model);
-                break;
-            default:
-                view.mensagem("Opção inválida. Tente novamente!");
-                view.opcao();
-                break;
+            view.failMensage("Erro: " + e.getMessage());
         }
     }
 

@@ -56,10 +56,7 @@ public class TelaPrincipalController implements Observer {
     public void handleEvent(String opcao) {
         switch (opcao) {
             case "1":
-                // Vai para a tela de Listar/Entrar em Times
-                // new TimesView().init(model);
-                Prompt.success("Indo para Meus Times... (Em construção)");
-                Prompt.scanner.nextLine();
+                new TelaTimeView().init(model);
                 break;
             case "2":
                 // Lógica rápida de criar time aqui mesmo ou chamar outra View

@@ -1,17 +1,17 @@
 package controller;
 
 import models.KanbanModel;
-import view.DeletarUsuarioView;
+import view.DeletarTimeView;
 import view.Observer;
 
-public class DeletarUsuarioController implements Observer {
+public class DeletarTimeController implements Observer {
 
     private KanbanModel model;
-    private DeletarUsuarioView view;
+    private DeletarTimeView view;
 
     private int id;
 
-    public void init(KanbanModel model, DeletarUsuarioView view) {
+    public void init(KanbanModel model, DeletarTimeView view) {
         if (model != null && view != null) {
             this.model = model;
             this.view = view;
@@ -25,8 +25,8 @@ public class DeletarUsuarioController implements Observer {
         try {
             this.id = view.getId();
 
-            model.deletarUsuario(id);
-            view.sucessMensage("Usuario deletado com sucesso!");
+            model.deletarTime(id);
+            view.sucessMensage("Time deletado com sucesso!");
 
         } catch (RuntimeException e) {
             view.failMensage("Erro: " + e.getMessage());
@@ -35,4 +35,5 @@ public class DeletarUsuarioController implements Observer {
 
     @Override
     public void update() {}
+
 }

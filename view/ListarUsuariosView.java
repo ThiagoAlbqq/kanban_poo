@@ -21,17 +21,17 @@ public class ListarUsuariosView implements Observer {
         }
     }
 
-    public void mensagem(String msg) {
-        System.out.println(">> " + msg);
+    public void mensagem(String mensagem) {
+        System.out.println(mensagem);
     }
 
-    public void opcao() {
-        System.out.println("1 - Voltar ao Menu Principal");
-        System.out.println("2 - Nova listagem");
-        System.out.println();
-        System.out.print("Digite a opcao: ");
-        opcao = Input.lerString();
-        controller.handleEvent(opcao);
+    public void sucessMensage(String msg) {
+        System.out.println(" ");
+        Prompt.success(msg);
+    }
+
+    public void failMensage(String msg) {
+        Prompt.error(msg);
     }
 
     @Override

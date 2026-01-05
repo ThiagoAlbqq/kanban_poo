@@ -1,37 +1,39 @@
 package view;
 
-import controller.CadastroTimeController;
-import controller.CadastroUsuarioController;
+import controller.EditarTimeController;
+import controller.EditarUsuarioController;
 import models.KanbanModel;
 
-import java.util.Scanner;
+public class EditarTimeView implements Observer {
 
-public class CadastroTimeView implements Observer {
-
-
-    private String nome;
+    private int id;
+    private String novoNome;
     private String opcao = "0";
 
     private KanbanModel model;
-    private CadastroTimeController controller;
-    public Scanner sc = Input.scanner;
+    private EditarTimeController controller;
 
     public void init(KanbanModel model) {
         if (model != null) {
             this.model = model;
-            controller = new CadastroTimeController();
+            controller = new EditarTimeController();
             controller.init(model, this);
             model.attachObserver(this);
 
-            controller.cadastrar();
+            controller.editar();
         }
     }
 
-    public void solicitarNome() {
-        Prompt.header("DANDANDAN-KANBAN : Criar Time");
-        nome = Prompt.input("Nome do Time: ");
+    public void solicitarId() {
+        id = Prompt.inputInt("Id");
     }
-    public String getNome() { return nome; }
+
+    public void solicitarNome() {
+        novoNome = Prompt.input("Nome");
+    }
+
+    public int getId() { return id; }
+    public String getNome() { return novoNome; }
 
     public void sucessMensage(String msg) {
         System.out.println(" ");
@@ -45,6 +47,5 @@ public class CadastroTimeView implements Observer {
     @Override
     public void update() {
     }
-
 
 }

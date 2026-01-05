@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Prompt {
 
-    // Cores ANSI (Funciona no VS Code, IntelliJ, Terminais Unix/Win10+)
     private static final String RESET = "\u001B[0m";
     private static final String CYAN = "\u001B[36m";
     private static final String GREEN = "\u001B[32m";

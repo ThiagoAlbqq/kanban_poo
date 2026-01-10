@@ -1,27 +1,32 @@
 package view;
 
-import controller.ListarTimesController;
+import controller.DeletarQuadroController;
+import controller.DeletarTimeController;
 import models.KanbanModel;
 
-public class ListarTimesView implements Observer {
+public class DeletarQuadroView implements Observer {
+
+    private int id;
 
     private KanbanModel model;
-    private ListarTimesController controller;
+    private DeletarQuadroController controller;
 
     public void init(KanbanModel model) {
         if (model != null) {
             this.model = model;
-            controller = new ListarTimesController();
+            controller = new DeletarQuadroController();
             controller.init(model, this);
             model.attachObserver(this);
 
-            controller.listar();
+            controller.deletar();
         }
     }
 
-    public void mensagem(String mensagem) {
-        System.out.println(mensagem);
+    public void solicitarId() {
+        id = Prompt.inputInt("Id");
     }
+
+    public int getId() { return id; }
 
     public void sucessMensage(String msg) {
         System.out.println(" ");

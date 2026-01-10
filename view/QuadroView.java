@@ -1,18 +1,19 @@
 package view;
 
-import controller.TimeController;
+import controller.QuadroController;
+import controller.UsuarioController;
 import models.KanbanModel;
 
+public class QuadroView implements Observer {
 
-public class TelaTimeView implements Observer {
 
     private KanbanModel model;
-    private TimeController controller;
+    private QuadroController controller;
 
     public void init(KanbanModel model) {
         if(model != null){
             this.model = model;
-            controller = new TimeController();
+            controller = new QuadroController();
             controller.init(model, this);
             model.attachObserver(this);
             mostrarMenu();
@@ -29,14 +30,12 @@ public class TelaTimeView implements Observer {
         do {
             Prompt.clear();
 
-            Prompt.header("Gestão de Times");
+            Prompt.header("Gestão de Quadros");
 
-            // CRUD de times
-            Prompt.menuItem("1", "Criar Novo Time");
-            Prompt.menuItem("2", "Listar Todos os Times");
-            Prompt.menuItem("3", "Editar Time");
-            Prompt.menuItem("4", "Remover Time");
-            Prompt.menuItem("5", "Acessar Time");
+            Prompt.menuItem("1", "Criar Quadro");
+            Prompt.menuItem("2", "Listar Quadro");
+            Prompt.menuItem("3", "Editar Quadro");
+            Prompt.menuItem("4", "Remover Quadro");
             Prompt.separator();
             Prompt.menuItem("0", "Voltar / Sair");
 
@@ -59,6 +58,5 @@ public class TelaTimeView implements Observer {
     public void update(){
         return;
     }
-
 
 }

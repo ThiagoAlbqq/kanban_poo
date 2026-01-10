@@ -7,22 +7,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardEntity implements Serializable {
 
-    private static final AtomicInteger count = new AtomicInteger(0);
-
     private int id;
     private String title;
     private String description;
+    private String status;
     private LocalDateTime createdAt;
 
     private UsuarioEntity assignee;
 
     private CardPriority priority;
 
-    public CardEntity(String title, String description, CardPriority priority) {
-        this.id = count.incrementAndGet();
+    public CardEntity(int id, String title, String description, CardPriority priority, String status) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.priority = priority != null ? priority : CardPriority.MEDIA;
+        this.status = status;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -33,6 +33,9 @@ public class CardEntity implements Serializable {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     public UsuarioEntity getAssignee() { return assignee; }
     public void setAssignee(UsuarioEntity assignee) {

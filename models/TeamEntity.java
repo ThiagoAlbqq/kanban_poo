@@ -11,6 +11,8 @@ public class TeamEntity implements Serializable {
 
     private int id;
     private String name;
+
+    // Não foi criado/editado durante o CRUD
     private String description;
 
     private UsuarioEntity owner;

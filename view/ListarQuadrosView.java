@@ -1,17 +1,17 @@
 package view;
 
-import controller.ListarTimesController;
+import controller.ListarQuadroController;
 import models.KanbanModel;
 
-public class ListarTimesView implements Observer {
+public class ListarQuadrosView implements Observer {
 
     private KanbanModel model;
-    private ListarTimesController controller;
+    private ListarQuadroController controller;
 
     public void init(KanbanModel model) {
         if (model != null) {
             this.model = model;
-            controller = new ListarTimesController();
+            controller = new ListarQuadroController();
             controller.init(model, this);
             model.attachObserver(this);
 

@@ -7,7 +7,6 @@ public class TelaInicialView implements Observer {
 
     private KanbanModel model;
     private TelaInicialController controller;
-    private boolean terminar = false;
 
     public void init(KanbanModel model) {
         if(model == null) return;

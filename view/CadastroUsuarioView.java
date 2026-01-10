@@ -26,7 +26,7 @@ public class CadastroUsuarioView implements Observer {
 
     public void solicitarNome() {
         Prompt.header("DANDANDAN-KANBAN : Criar Conta");
-        nome = Prompt.input("Nome do Conta: ");
+        nome = Prompt.input("Nome do Usuario: ");
     }
 
     public void solicitarEmail() {

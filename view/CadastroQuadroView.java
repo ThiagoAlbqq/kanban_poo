@@ -1,27 +1,34 @@
 package view;
 
-import controller.ListarTimesController;
+import controller.CadastroQuadroController;
 import models.KanbanModel;
 
-public class ListarTimesView implements Observer {
+import java.util.Scanner;
+
+public class CadastroQuadroView implements Observer {
+
+    private String nome;
+    private String opcao = "0";
 
     private KanbanModel model;
-    private ListarTimesController controller;
+    private CadastroQuadroController controller;
 
     public void init(KanbanModel model) {
         if (model != null) {
             this.model = model;
-            controller = new ListarTimesController();
+            controller = new CadastroQuadroController();
             controller.init(model, this);
             model.attachObserver(this);
 
-            controller.listar();
+            controller.cadastrar();
         }
     }
 
-    public void mensagem(String mensagem) {
-        System.out.println(mensagem);
+    public void solicitarNome() {
+        Prompt.header("DANDANDAN-KANBAN : Criar Quadro");
+        nome = Prompt.input("Nome do Quadro: ");
     }
+    public String getNome() { return nome; }
 
     public void sucessMensage(String msg) {
         System.out.println(" ");

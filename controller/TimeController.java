@@ -2,6 +2,7 @@ package controller;
 
 import models.KanbanModel;
 import view.*;
+import view.time.*;
 
 public class TimeController implements Observer {
 

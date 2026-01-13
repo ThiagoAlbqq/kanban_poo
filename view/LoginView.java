@@ -1,12 +1,8 @@
 package view;
 
-import controller.CadastroUsuarioController;
 import controller.LoginController;
 import models.KanbanModel;
 
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.util.Scanner;
 
 public class LoginView implements Observer {

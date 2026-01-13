@@ -2,6 +2,10 @@ package controller;
 
 import models.KanbanModel;
 import view.*;
+import view.usuario.CadastroUsuarioView;
+import view.usuario.DeletarUsuarioView;
+import view.usuario.EditarUsuarioView;
+import view.usuario.ListarUsuariosView;
 
 public class UsuarioController implements Observer {
 

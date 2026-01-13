@@ -2,6 +2,7 @@ package models;
 
 import view.Observer;
 
+import javax.smartcardio.Card;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class KanbanModel implements Serializable {
     private UsuarioEntity usuarioLogado;
     private TeamEntity timeSelecionado;    // Qual time está aberto?
     private BoardEntity quadroSelecionado; // Qual quadro está aberto?
+    private CardEntity cardSelecionado;
 
     // Lista de observadores (transient = não salva no arquivo)
     private transient ArrayList<Observer> observers;
@@ -245,6 +247,7 @@ public class KanbanModel implements Serializable {
         this.timeSelecionado = timeEncontrado;
         // Ao mudar de time, reseta o quadro selecionado para evitar inconsistência
         this.quadroSelecionado = null;
+        this.cardSelecionado = null;
     }
 
     public TeamEntity getTimeSelecionado() {
@@ -319,6 +322,7 @@ public class KanbanModel implements Serializable {
         if (timeSelecionado != null && timeSelecionado.getId() == id) {
             timeSelecionado = null;
             quadroSelecionado = null;
+            cardSelecionado = null;
         }
 
         salvarDados();
@@ -493,6 +497,7 @@ public class KanbanModel implements Serializable {
         // Se deletou o quadro que estava aberto, fecha ele
         if(quadroSelecionado != null && quadroSelecionado.getId() == id) {
             quadroSelecionado = null;
+            cardSelecionado = null;
         }
 
         salvarDados();
@@ -578,6 +583,21 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
+    public void selecionarCard(int idCard) {
+        if (quadroSelecionado == null) throw new RuntimeException("Nenhum quadro selecionado.");
+
+        CardEntity alvo = null;
+        for (CardEntity c : quadroSelecionado.getCards()) {
+            if (c.getId() == idCard) {
+                alvo = c;
+                break;
+            }
+        }
+
+        if (alvo == null) throw new RuntimeException("Card não encontrado.");
+        this.cardSelecionado = alvo;
+    }
+
     // --- ATUALIZADO: CRIAR CARD (Vai para a primeira coluna sempre) ---
     public void criarCard(String titulo, String descricao, CardPriority prioridade) {
         if (quadroSelecionado == null) throw new RuntimeException("Nenhum quadro aberto.");
@@ -595,6 +615,29 @@ public class KanbanModel implements Serializable {
         salvarDados();
         notifica();
     }
+
+    public void editarCard(int id, String titulo, String descricao, CardPriority prioridade) {
+        selecionarCard(id);
+        if (cardSelecionado == null) throw new RuntimeException("Nenhum card aberto.");
+
+        CardEntity alvo = cardSelecionado;
+
+        if (!(titulo == null || titulo.isEmpty())) {
+            alvo.setTitle(titulo);
+        };
+
+        if (!(descricao == null || descricao.isEmpty())) {
+            alvo.setDescription(descricao);
+        }
+
+        if (prioridade != null) {
+            alvo.setPriority(prioridade);
+        }
+
+        salvarDados();
+        notifica();
+    }
+
 
     // --- ATUALIZADO: MOVER CARD (Dinâmico) ---
     public void moverCard(int idCard) {

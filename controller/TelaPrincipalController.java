@@ -2,6 +2,8 @@ package controller;
 
 import models.KanbanModel;
 import view.*;
+import view.time.CadastroTimeView;
+import view.usuario.EditarUsuarioView;
 
 public class TelaPrincipalController implements Observer {
 

@@ -22,7 +22,6 @@ public class KanbanBoardController implements Observer {
         String titulo = Prompt.input("Título");
         String desc = Prompt.input("Descrição");
 
-        // Menu simples para prioridade
         System.out.println("Prioridade: [1] Baixa | [2] Média | [3] Alta");
         int prioOp = Prompt.inputInt("Opção");
         CardPriority prio = CardPriority.MEDIA;
@@ -46,7 +45,6 @@ public class KanbanBoardController implements Observer {
         String nome = Prompt.input("Nome da Coluna");
 
         try {
-            // Chama aquele método criarColuna que fizemos no Model
             model.criarColuna(nome);
             Prompt.success("Coluna '" + nome.toUpperCase() + "' adicionada!");
         } catch (Exception e) {
@@ -64,15 +62,10 @@ public class KanbanBoardController implements Observer {
         } catch (Exception e) {
             Prompt.error(e.getMessage());
         }
-        view.pausa(); // Pausa para o usuário ver o resultado
+        view.pausa();
     }
-
-    // Listagem é feita direto na View puxando do Model,
-    // mas se quiser lógica extra, coloque aqui.
 
     @Override
     public void update() {
-        // Quando o model muda, a gente poderia redesenhar,
-        // mas como o loop da View redesenha sempre, não precisa.
     }
 }

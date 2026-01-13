@@ -2,8 +2,7 @@ package controller;
 
 import models.KanbanModel;
 import view.*;
-
-import java.awt.event.ActionListener;
+import view.usuario.CadastroUsuarioView;
 
 public class TelaInicialController implements Observer {
     private KanbanModel model;

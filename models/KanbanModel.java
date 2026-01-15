@@ -4,6 +4,7 @@ import view.Observer;
 
 import javax.smartcardio.Card;
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -638,6 +639,53 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
+    public void deletarCard(int id) {
+        selecionarCard(id);
+
+        for(CardEntity c : quadroSelecionado.getCards()) {
+            if (c.getId() == id) {
+                quadroSelecionado.removeCard(c);
+                salvarDados();
+            }
+        }
+
+        cardSelecionado = null;
+    }
+
+    public String[] listarCard() {
+        CardEntity alvo = cardSelecionado;
+
+        if (alvo == null) {
+            return new String[0];
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        String id = String.valueOf(alvo.getId());
+        String title = alvo.getTitle() != null ? alvo.getTitle() : "";
+        String description = alvo.getDescription() != null ? alvo.getDescription() : "";
+        String status = alvo.getStatus() != null ? alvo.getStatus() : "Sem status";
+
+        String createdAt = alvo.getCreatedAt() != null ? alvo.getCreatedAt().format(formatter) : "";
+
+        String assigneeName = "Não atribuído";
+        if (alvo.getAssignee() != null && alvo.getAssignee().getUsername() != null) {
+            assigneeName = alvo.getAssignee().getUsername();
+        }
+
+        String priority = alvo.getPriority() != null ? alvo.getPriority().toString() : "Normal";
+
+        return new String[] {
+                id,
+                title,
+                description,
+                status,
+                createdAt,
+                assigneeName,
+                priority
+        };
+    }
+
 
     // --- ATUALIZADO: MOVER CARD (Dinâmico) ---
     public void moverCard(int idCard) {
@@ -693,6 +741,19 @@ public class KanbanModel implements Serializable {
         }
 
         return relatorio.toArray(new String[0]);
+    }
+
+    public ColumnEntity selecionarColuna(int colunaId) {
+        if(quadroSelecionado == null) return null;
+        for(ColumnEntity c : quadroSelecionado.getColunas()) {
+
+        }
+    }
+
+    public ArrayList<String> listarColuna(int colunaId) {
+        ArrayList<String> data = new ArrayList<>();
+
+
     }
 
 }

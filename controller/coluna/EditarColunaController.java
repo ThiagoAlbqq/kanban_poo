@@ -2,6 +2,7 @@ package controller.coluna;
 
 import models.KanbanModel;
 import view.Observer;
+import view.coluna.EditarColunaView;
 import view.quadro.EditarQuadroView;
 
 public class EditarColunaController implements Observer {

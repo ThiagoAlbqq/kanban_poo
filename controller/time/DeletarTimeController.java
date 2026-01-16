@@ -1,6 +1,7 @@
 package controller.time;
 
 import models.KanbanModel;
+import view.TelaPrincipalView;
 import view.time.DeletarTimeView;
 import view.Observer;
 
@@ -27,7 +28,7 @@ public class DeletarTimeController implements Observer {
 
             model.deletarTime(id);
             view.sucessMensage("Time deletado com sucesso!");
-
+            new TelaPrincipalView().init(model);
         } catch (RuntimeException e) {
             view.failMensage("Erro: " + e.getMessage());
         }

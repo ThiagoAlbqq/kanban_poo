@@ -9,15 +9,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class UsuarioEntity implements Serializable {
 
-    private static final AtomicInteger count = new AtomicInteger(0);
-
     private int id;
     private String username;
     private String email;
     private String passwordHash;
 
-    public UsuarioEntity(String username, String email, String password) {
-        this.id = count.incrementAndGet();
+    public UsuarioEntity(int id, String username, String email, String password) {
+        this.id = id;
         setUsername(username);
         setEmail(email);
         setPassword(password);

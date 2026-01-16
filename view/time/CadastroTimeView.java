@@ -31,7 +31,7 @@ public class CadastroTimeView implements Observer {
 
     public void solicitarNome() {
         Prompt.header("DANDANDAN-KANBAN : Criar Time");
-        nome = Prompt.input("Nome do Time: ");
+        nome = Prompt.input("Nome do Time");
     }
     public String getNome() { return nome; }
 

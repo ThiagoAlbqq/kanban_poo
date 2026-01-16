@@ -26,7 +26,7 @@ public class AcessarQuadroController implements Observer {
 
             Prompt.success("Quadro selecionado: " + model.getTimeSelecionado().getName());
 
-            new KanbanBoardView().init(model);
+            new TelaQuadroView().init(model);
 
         } catch (RuntimeException e) {
             Prompt.error(e.getMessage());

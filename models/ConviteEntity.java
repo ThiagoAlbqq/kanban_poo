@@ -23,6 +23,7 @@ public class ConviteEntity implements Serializable {
     // Getters e Setters necessários
     public int getId() { return id; }
     public String getDestinatarioEmail() { return destinatarioEmail; }
+    public void setDestinatarioEmail(String destinatario) { this.destinatarioEmail = destinatario; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
     public int getIdTime() { return idTime; }

@@ -4,6 +4,8 @@ import models.CardPriority;
 import models.KanbanModel;
 import view.card.CadastroCardView;
 import view.Observer;
+import view.coluna.ListarColunaView;
+import view.coluna.ListarColunasView;
 
 public class CadastroCardController implements Observer {
 
@@ -11,7 +13,7 @@ public class CadastroCardController implements Observer {
     private CadastroCardView view;
 
     private String titulo, desc;
-    private int prioOp;
+    private int prioOp, idColuna;
 
     public void init(KanbanModel model, CadastroCardView view) {
         if (model != null && view != null) {
@@ -22,11 +24,18 @@ public class CadastroCardController implements Observer {
     }
 
     public void cadastrar() {
-        view.solicitarTitulo();
-        view.solicitarDescricao();
-        view.solicitarPrioridade();
-
         try {
+            new ListarColunasView().init(model);
+
+            view.solicitarIdColuna();
+
+            this.idColuna = view.getIdColuna();
+            model.selecionarColuna(idColuna);
+
+            view.solicitarTitulo();
+            view.solicitarDescricao();
+            view.solicitarPrioridade();
+
             this.titulo = view.getTitulo();
             this.desc = view.getDesc();
             this.prioOp = view.getPrioOp();
@@ -35,7 +44,7 @@ public class CadastroCardController implements Observer {
             if(prioOp == 1) prio = CardPriority.BAIXA;
             if(prioOp == 3) prio = CardPriority.ALTA;
 
-            model.criarCard(titulo, desc, prio);
+            model.criarCardColuna(idColuna, titulo, desc, prio);
 
             view.sucessMensage("Cadastro efetuado com sucesso!");
 

@@ -2,7 +2,9 @@ package controller;
 
 import models.KanbanModel;
 import view.*;
+import view.convite.TelaConvitesView;
 import view.time.CadastroTimeView;
+import view.time.ListarTimesView;
 import view.usuario.EditarUsuarioView;
 
 public class TelaPrincipalController implements Observer {
@@ -16,39 +18,6 @@ public class TelaPrincipalController implements Observer {
         model.attachObserver(this);
     }
 
-    // Aquele método "Vite" que fizemos antes, agora integrado no login
-    public void checarNotificacoesAoEntrar() {
-        String[] convites = model.verificarMeusConvites();
-
-        if (convites.length > 0) {
-            Prompt.clear();
-            Prompt.separator();
-            System.out.println("🔔 VOCÊ TEM CONVITES PENDENTES");
-            Prompt.separator();
-
-            for (String c : convites) {
-                String[] partes = c.split("#");
-                int idConvite = Integer.parseInt(partes[0]);
-                String nomeTime = partes[1];
-                String quemMandou = partes[2];
-
-                // Usa o Prompt bonito (Y/n)
-                boolean aceitou = Prompt.confirm("Entrar no time '" + nomeTime + "' de " + quemMandou + "?");
-
-                try {
-                    model.responderConvite(idConvite, aceitou);
-                    if (aceitou) Prompt.success("Você entrou no time!");
-                    else Prompt.error("Convite recusado.");
-                } catch (Exception e) {
-                    Prompt.error(e.getMessage());
-                }
-            }
-            // Pausa rápida para ler
-            System.out.println("\nPressione Enter para ir ao Dashboard...");
-            Prompt.scanner.nextLine();
-        }
-    }
-
     public void fazerLogout() {
         model.deslogarUsuario();
         Prompt.success("Logout realizado com sucesso.");
@@ -58,7 +27,7 @@ public class TelaPrincipalController implements Observer {
     public void handleEvent(String opcao) {
         switch (opcao) {
             case "1":
-                new TelaTimeView().init(model);
+                new ListarTimesView.TelaTimeView().init(model);
                 break;
             case "2":
                 // Lógica rápida de criar time aqui mesmo ou chamar outra View
@@ -66,7 +35,7 @@ public class TelaPrincipalController implements Observer {
                 break;
             case "3":
                 // Chama a checagem novamente
-                checarNotificacoesAoEntrar();
+                new TelaConvitesView().init(model);
                 break;
             case "4":
                 // Vai para edição de usuário (reaproveita sua view de edição)

@@ -2,6 +2,7 @@ package controller.coluna;
 
 import models.KanbanModel;
 import view.Observer;
+import view.coluna.DeletarColunaView;
 import view.quadro.DeletarQuadroView;
 
 public class DeletarColunaController implements Observer {

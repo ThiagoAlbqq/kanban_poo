@@ -2,10 +2,11 @@ package controller.coluna;
 
 import models.KanbanModel;
 import view.Observer;
-import view.quadro.ListarQuadrosView;
+import view.coluna.ListarColunaView;
 
 public class ListarColunaController implements Observer {
 
+    private int id;
     private KanbanModel model;
     private ListarColunaView view;
 
@@ -19,7 +20,9 @@ public class ListarColunaController implements Observer {
 
     public void listar() {
         try {
-            String[] lista = model.listarColuna();
+            view.solicitarId();
+            this.id = view.getId();
+            String[] lista = model.buscarColunaPorIdString(id);
             for(String u : lista) {
                 view.mensagem(u);
             }

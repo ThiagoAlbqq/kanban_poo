@@ -2,7 +2,7 @@ package controller.coluna;
 
 import models.KanbanModel;
 import view.Observer;
-import view.quadro.CadastroQuadroView;
+import view.coluna.CadastroColunaView;
 
 public class CadastroColunaController implements Observer {
 

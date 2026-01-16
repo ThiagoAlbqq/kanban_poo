@@ -7,6 +7,7 @@ import view.Prompt;
 
 public class CadastroCardView implements Observer {
 
+    private int idColuna;
     private String titulo, desc;
     private int prioOp;
     private String opcao = "0";
@@ -25,8 +26,12 @@ public class CadastroCardView implements Observer {
         }
     }
 
-    public void solicitarTitulo() {
+    public void solicitarIdColuna() {
         Prompt.header("NOVA TAREFA");
+        idColuna = Prompt.inputInt("ID Coluna");
+    }
+
+    public void solicitarTitulo() {
         titulo = Prompt.input("Título");
     }
 
@@ -37,6 +42,10 @@ public class CadastroCardView implements Observer {
     public void solicitarPrioridade() {
         System.out.println("Prioridade: [1] Baixa | [2] Média | [3] Alta");
         prioOp = Prompt.inputInt("Opção");
+    }
+
+    public int getIdColuna() {
+        return idColuna;
     }
 
     public String getTitulo() {

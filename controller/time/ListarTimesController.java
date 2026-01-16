@@ -6,7 +6,6 @@ import view.Observer;
 
 public class ListarTimesController implements Observer {
 
-
     private KanbanModel model;
     private ListarTimesView view;
 

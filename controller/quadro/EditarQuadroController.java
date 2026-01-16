@@ -39,4 +39,5 @@ public class EditarQuadroController implements Observer {
 
     @Override
     public void update() {}
+
 }

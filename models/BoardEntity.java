@@ -11,7 +11,7 @@ public class BoardEntity implements Serializable {
     private List<CardEntity> cards;
 
     // NOVO: A lista de nomes das colunas (Ex: "TODO", "DOING", "QA", "DONE")
-    private List<String> colunas;
+    private List<ColumnEntity> colunas;
 
     public BoardEntity(int id, String nome) {
         this.id = id;
@@ -20,15 +20,21 @@ public class BoardEntity implements Serializable {
         this.colunas = new ArrayList<>();
 
         // Colunas Padrão
-        colunas.add("A FAZER");
-        colunas.add("EM ANDAMENTO");
-        colunas.add("CONCLUÍDO");
+        colunas.add(new ColumnEntity(1,"A FAZER"));
+        colunas.add(new ColumnEntity(2, "EM ANDAMENTO"));
+        colunas.add(new ColumnEntity(3, "CONCLUÍDO"));
     }
 
-    public List<String> getColunas() { return colunas; }
+    public List<ColumnEntity> getColunas() { return colunas; }
 
-    public void adicionarColuna(String nome) {
-        colunas.add(nome);
+    public void adicionarColuna(int id, String nome) {
+        colunas.stream()
+                .filter(c -> c.getName().equals(nome))
+                .findFirst()
+                .ifPresentOrElse(
+                        c -> {},
+                        () -> colunas.add(new ColumnEntity(id, nome))
+                );
     }
 
     // --- Getters e Setters ---

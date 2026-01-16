@@ -7,8 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TeamEntity implements Serializable {
 
-    private static final AtomicInteger count = new AtomicInteger(0);
-
     private int id;
     private String name;
 
@@ -20,8 +18,8 @@ public class TeamEntity implements Serializable {
     private List<UsuarioEntity> members = new ArrayList<>();
     private List<BoardEntity> boards = new ArrayList<>();
 
-    public TeamEntity(String name, String description, UsuarioEntity owner) {
-        this.id = count.incrementAndGet();
+    public TeamEntity(int id, String name, String description, UsuarioEntity owner) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.owner = owner;

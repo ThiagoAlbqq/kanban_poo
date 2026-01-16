@@ -13,9 +13,6 @@ public class TelaPrincipalView implements Observer {
         controller = new TelaPrincipalController();
         controller.init(model, this);
         model.attachObserver(this);
-
-        controller.checarNotificacoesAoEntrar();
-
         mostrarMenu();
     }
 

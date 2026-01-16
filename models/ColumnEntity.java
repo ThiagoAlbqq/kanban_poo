@@ -6,15 +6,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ColumnEntity implements Serializable {
-    private static final AtomicInteger count = new AtomicInteger(0);
 
     private int id;
     private String name;
 
     private List<CardEntity> cards = new ArrayList<>();
 
-    public ColumnEntity(String name) {
-        this.id = count.incrementAndGet();
+    public ColumnEntity(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 

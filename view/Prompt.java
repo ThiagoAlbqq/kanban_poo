@@ -1,5 +1,7 @@
 package view;
 
+import models.CancelarException;
+
 import java.util.Scanner;
 
 public class Prompt {
@@ -49,13 +51,27 @@ public class Prompt {
 
     public static String input(String texto) {
         System.out.print(BOLD + "> " + texto + ": " + RESET);
-        return scanner.nextLine().trim();
+
+        String input = scanner.nextLine().trim();
+
+        if (input.equalsIgnoreCase("sair")) {
+            throw new CancelarException();
+        }
+
+        return input;
     }
 
     public static int inputInt(String texto) {
         System.out.print(BOLD + "> " + texto + ": " + RESET);
+
+        String input = scanner.nextLine().trim();
+
+        if (input.equalsIgnoreCase("sair")) {
+            throw new CancelarException();
+        }
+
         try {
-            return Integer.parseInt(scanner.nextLine().trim());
+            return Integer.parseInt(input);
         } catch (NumberFormatException e) {
             return -1;
         }
@@ -74,6 +90,10 @@ public class Prompt {
             System.out.print(CYAN + "? " + RESET + BOLD + pergunta + RESET + " (Y/n) ");
 
             String input = scanner.nextLine().trim().toLowerCase();
+
+            if (input.equalsIgnoreCase("sair")) {
+                throw new CancelarException();
+            }
 
             if (input.isEmpty() || input.equals("y") || input.equals("s")) {
                 return true;

@@ -5,6 +5,7 @@ import models.KanbanModel;
 import view.Observer;
 import view.Prompt;
 import view.QuadroView;
+import view.TelaQuadroView;
 
 public class AcessarQuadroView implements Observer {
 
@@ -22,16 +23,15 @@ public class AcessarQuadroView implements Observer {
 
     public void mostrarOpcoes() {
         Prompt.clear();
-        Prompt.header("SELECIONAR TIME");
+        Prompt.header("SELECIONAR QUADRO");
 
         controller.listarQuadrosDisponiveis();
 
         System.out.println();
         Prompt.separator();
-        System.out.println("Digite o ID do time para entrar ou 0 para voltar.");
+        System.out.println("Digite o ID do quadro para entrar ou 0 para voltar.");
 
-        int id = Prompt.inputInt("ID do Time");
-
+        int id = Prompt.inputInt("ID do quadro");
         if (id == 0) {
             new QuadroView().init(model);
         } else {

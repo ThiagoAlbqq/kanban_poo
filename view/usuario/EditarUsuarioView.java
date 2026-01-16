@@ -7,7 +7,6 @@ import view.Prompt;
 
 public class EditarUsuarioView implements Observer {
 
-    private int id;
     private String novoNome, novoEmail, novaSenha;
     private String opcao = "0";
 
@@ -25,10 +24,6 @@ public class EditarUsuarioView implements Observer {
         }
     }
 
-    public void solicitarId() {
-        id = Prompt.inputInt("Id");
-    }
-
     public void solicitarNome() {
         novoNome = Prompt.input("Nome");
     }
@@ -41,10 +36,13 @@ public class EditarUsuarioView implements Observer {
         novaSenha = Prompt.input("Senha");
     }
 
-    public int getId() { return id; }
     public String getNome() { return novoNome; }
     public String getEmail() { return novoEmail; }
     public String getSenha() { return novaSenha; }
+
+    public void message(String msg) {
+        System.out.println(msg);
+    }
 
     public void sucessMensage(String msg) {
         System.out.println(" ");

@@ -79,10 +79,14 @@ public class Prompt {
 
     public static void success(String msg) {
         System.out.println(GREEN + "✔ " + msg + RESET);
+        System.out.println("Pressione Enter para continuar...");
+        scanner.nextLine();
     }
 
     public static void error(String msg) {
         System.out.println(RED + "✖ " + msg + RESET);
+        System.out.println("Pressione Enter para continuar...");
+        scanner.nextLine();
     }
 
     public static boolean confirm(String pergunta) {

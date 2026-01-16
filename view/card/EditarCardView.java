@@ -1,6 +1,7 @@
 package view.card;
 
 import controller.card.EditarCardController;
+import controller.card.TelaCardController;
 import models.KanbanModel;
 import view.Observer;
 import view.Prompt;
@@ -71,4 +72,57 @@ public class EditarCardView implements Observer {
     public void update() {
     }
 
+    public static class TelaCardView implements Observer {
+
+        private KanbanModel model;
+        private TelaCardController controller;
+
+        public void init(KanbanModel model) {
+            if(model != null){
+                this.model = model;
+                controller = new TelaCardController();
+                controller.init(model, this);
+                model.attachObserver(this);
+                mostrarMenu();
+            }
+        }
+
+        public void mensagem(String msg){
+            System.out.println(">>" + msg);
+        }
+
+        public void mostrarMenu() {
+            boolean sair = false;
+
+            do {
+                Prompt.clear();
+
+                Prompt.header("Gestão de Cards");
+
+                Prompt.menuItem("1", "Criar Novo Card");
+                Prompt.menuItem("2", "Listar Todos");
+                Prompt.menuItem("3", "Editar Card");
+                Prompt.menuItem("4", "Remover Card");
+                Prompt.separator();
+                Prompt.menuItem("0", "Voltar / Sair");
+
+                System.out.println();
+
+                String op = Prompt.input("Escolha uma opção");
+
+                if (op.equals("0")) {
+                    sair = true;
+                } else {
+                    controller.handleEvent(op);
+                }
+
+            } while (!sair);
+        }
+
+        @Override
+        public void update(){
+            return;
+        }
+
+    }
 }

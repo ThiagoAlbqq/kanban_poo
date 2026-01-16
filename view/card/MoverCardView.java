@@ -54,13 +54,11 @@ public class MoverCardView implements Observer {
     public void sucessMensage(String msg) {
         System.out.println(" ");
         Prompt.success(msg);
-        try { Thread.sleep(1500); } catch (InterruptedException e) {}
     }
 
     public void failMensage(String msg) {
         System.out.println(" ");
         Prompt.error(msg);
-        try { Thread.sleep(1500); } catch (InterruptedException e) {}
     }
 
     @Override

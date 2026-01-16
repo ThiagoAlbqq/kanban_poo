@@ -30,16 +30,16 @@ public class CadastroUsuarioView implements Observer {
 
     public void solicitarNome() {
         Prompt.header("DANDANDAN-KANBAN : Criar Conta");
-        nome = Prompt.input("Nome do Usuario: ");
+        nome = Prompt.input("Nome do Usuario");
     }
 
     public void solicitarEmail() {
-        email = Prompt.input("Email do Conta: ");
+        email = Prompt.input("Email do Conta");
     }
 
     public void solicitarSenha() {
-        senha1 = Prompt.input("Senha do Conta: ");
-        senha2 = Prompt.input("Confirma senha: ");
+        senha1 = Prompt.input("Senha da Conta");
+        senha2 = Prompt.input("Confirma senha");
     }
 
     public String getNome() { return nome; }

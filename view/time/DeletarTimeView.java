@@ -7,8 +7,6 @@ import view.Prompt;
 
 public class DeletarTimeView implements Observer {
 
-    private int id;
-
     private KanbanModel model;
     private DeletarTimeController controller;
 
@@ -22,12 +20,6 @@ public class DeletarTimeView implements Observer {
             controller.deletar();
         }
     }
-
-    public void solicitarId() {
-        id = Prompt.inputInt("Id");
-    }
-
-    public int getId() { return id; }
 
     public void sucessMensage(String msg) {
         System.out.println(" ");

@@ -5,6 +5,7 @@ import view.*;
 import view.convite.TelaConvitesView;
 import view.time.CadastroTimeView;
 import view.time.ListarTimesView;
+import view.time.TelaTimeView;
 import view.usuario.EditarUsuarioView;
 
 public class TelaPrincipalController implements Observer {
@@ -27,7 +28,7 @@ public class TelaPrincipalController implements Observer {
     public void handleEvent(String opcao) {
         switch (opcao) {
             case "1":
-                new ListarTimesView.TelaTimeView().init(model);
+                new TelaTimeView().init(model);
                 break;
             case "2":
                 // Lógica rápida de criar time aqui mesmo ou chamar outra View

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class KanbanModel implements Serializable {
 
@@ -24,14 +23,14 @@ public class KanbanModel implements Serializable {
     // --- DADOS PERSISTIDOS ---
     private List<UsuarioEntity> usuarios;
     private List<ConviteEntity> convites;
-    private List<TeamEntity> times;
+    private List<TimeEntity> times;
 
     // --- ESTADO DA SESSÃO ---
     private UsuarioEntity usuarioLogado;
-    private TeamEntity timeSelecionado;
-    private BoardEntity quadroSelecionado;
+    private TimeEntity timeSelecionado;
+    private QuadroEntity quadroSelecionado;
     private CardEntity cardSelecionado;
-    private ColumnEntity colunaSelecionada;
+    private ColunaEntity colunaSelecionada;
 
     // --- OBSERVERS (TRANSIENT) ---
     private transient List<Observer> observers;
@@ -157,6 +156,15 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
+    public String[] getUsuarioLogadoString() {
+        return new String[]{
+                String.valueOf(usuarioLogado.getId()),
+                usuarioLogado.getUsername(),
+                usuarioLogado.getEmail(),
+                usuarioLogado.getPasswordHash()
+        };
+    }
+
     public UsuarioEntity getUsuarioLogado() {
         return usuarioLogado;
     }
@@ -192,8 +200,8 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
-    public void editarUsuario(int id, String novoNome, String novoEmail, String novaSenha) {
-        UsuarioEntity usuario = buscarUsuarioPorId(id);
+    public void editarUsuario(String novoNome, String novoEmail, String novaSenha) {
+        UsuarioEntity usuario = usuarioLogado;
 
         if (novoEmail != null && !novoEmail.trim().isEmpty() && !novoEmail.equals(usuario.getEmail())) {
             if (buscarUsuarioPorEmail(novoEmail) != null) {
@@ -229,7 +237,7 @@ public class KanbanModel implements Serializable {
         UsuarioEntity usuario = buscarUsuarioPorId(id);
 
         // Remove usuário de todos os times
-        for (TeamEntity time : times) {
+        for (TimeEntity time : times) {
             if (time.getMembers().contains(usuario)) {
                 if (!time.getOwner().equals(usuario)) {
                     time.getMembers().remove(usuario);
@@ -294,7 +302,7 @@ public class KanbanModel implements Serializable {
 
         validarUsuarioLogado();
 
-        TeamEntity time = buscarTimePorId(idTime);
+        TimeEntity time = buscarTimePorId(idTime);
 
         if (!time.getMembers().contains(usuarioLogado)) {
             throw new IllegalStateException("Você não é membro deste time.");
@@ -307,7 +315,7 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
-    public TeamEntity getTimeSelecionado() {
+    public TimeEntity getTimeSelecionado() {
         return timeSelecionado;
     }
 
@@ -317,7 +325,7 @@ public class KanbanModel implements Serializable {
 
         int maiorId = 0;
         if (times != null) {
-            for (TeamEntity t : times) {
+            for (TimeEntity t : times) {
                 if (t == null) continue;
 
                 if (t.getId() > maiorId) {
@@ -327,17 +335,17 @@ public class KanbanModel implements Serializable {
         }
         int novoId = maiorId + 1;
 
-        TeamEntity novoTime = new TeamEntity(novoId, nome, "", usuarioLogado);
+        TimeEntity novoTime = new TimeEntity(novoId, nome, "", usuarioLogado);
         times.add(novoTime);
         salvarDados();
         notifica();
     }
 
-    public void editarTime(int id, String novoNome) {
+    public void editarTime(String novoNome) {
         validarUsuarioLogado();
         validarParametro(novoNome, "Nome");
 
-        TeamEntity time = buscarTimePorId(id);
+        TimeEntity time = timeSelecionado;
         validarPermissaoLider(time);
 
         time.setName(novoNome);
@@ -345,15 +353,15 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
-    public void deletarTime(int id) {
+    public void deletarTime() {
         validarUsuarioLogado();
 
-        TeamEntity time = buscarTimePorId(id);
+        TimeEntity time = timeSelecionado;
         validarPermissaoLider(time);
 
         times.remove(time);
 
-        if (timeSelecionado != null && timeSelecionado.getId() == id) {
+        if (timeSelecionado != null) {
             limparContexto();
         }
 
@@ -364,7 +372,7 @@ public class KanbanModel implements Serializable {
     public void transferirLideranca(int idTime, int idNovoLider) {
         validarUsuarioLogado();
 
-        TeamEntity time = buscarTimePorId(idTime);
+        TimeEntity time = buscarTimePorId(idTime);
         validarPermissaoLider(time);
 
         UsuarioEntity novoLider = buscarUsuarioPorId(idNovoLider);
@@ -381,7 +389,7 @@ public class KanbanModel implements Serializable {
     public void removerMembroDoTime(int idTime, int idMembro) {
         validarUsuarioLogado();
 
-        TeamEntity time = buscarTimePorId(idTime);
+        TimeEntity time = buscarTimePorId(idTime);
         validarPermissaoLider(time);
 
         UsuarioEntity membro = buscarUsuarioPorId(idMembro);
@@ -411,7 +419,7 @@ public class KanbanModel implements Serializable {
     }
 
     public String[] listarMembrosDoTime(int idTime) {
-        TeamEntity time = buscarTimePorId(idTime);
+        TimeEntity time = buscarTimePorId(idTime);
 
         return time.getMembers().stream()
                 .map(m -> String.format("%d - %s (%s)%s",
@@ -420,7 +428,7 @@ public class KanbanModel implements Serializable {
                 .toArray(String[]::new);
     }
 
-    public TeamEntity buscarTimePorId(int id) {
+    public TimeEntity buscarTimePorId(int id) {
         return times.stream()
                 .filter(t -> t.getId() == id)
                 .findFirst()
@@ -432,7 +440,7 @@ public class KanbanModel implements Serializable {
     public void enviarConvite(String emailDestinatario) {
         validarUsuarioLogado();
         validarParametro(emailDestinatario, "Email do destinatário");
-        TeamEntity time = timeSelecionado;
+        TimeEntity time = timeSelecionado;
         UsuarioEntity destinatario = buscarUsuarioPorEmail(emailDestinatario);
 
         if (destinatario == null) {
@@ -508,7 +516,7 @@ public class KanbanModel implements Serializable {
     public void entrarNoTime(int idTime) {
         validarUsuarioLogado();
 
-        TeamEntity time = buscarTimePorId(idTime);
+        TimeEntity time = buscarTimePorId(idTime);
 
         if (time.getMembers().contains(usuarioLogado)) {
             return;
@@ -534,14 +542,14 @@ public class KanbanModel implements Serializable {
         if(idQuadro == -1) { quadroSelecionado = null; return; }
         validarTimeSelecionado();
 
-        BoardEntity quadro = buscarQuadroPorId(idQuadro);
+        QuadroEntity quadro = buscarQuadroPorId(idQuadro);
         this.quadroSelecionado = quadro;
         this.cardSelecionado = null;
         this.colunaSelecionada = null;
         notifica();
     }
 
-    public BoardEntity getQuadroSelecionado() {
+    public QuadroEntity getQuadroSelecionado() {
         return quadroSelecionado;
     }
 
@@ -550,7 +558,7 @@ public class KanbanModel implements Serializable {
         validarParametro(nome, "Nome");
 
         int novoId = timeSelecionado.getBoards().size() + 1;
-        BoardEntity novoQuadro = new BoardEntity(novoId, nome);
+        QuadroEntity novoQuadro = new QuadroEntity(novoId, nome);
 
         timeSelecionado.addBoard(novoQuadro);
         salvarDados();
@@ -561,7 +569,7 @@ public class KanbanModel implements Serializable {
         validarTimeSelecionado();
         validarParametro(novoNome, "Nome");
 
-        BoardEntity quadro = buscarQuadroPorId(id);
+        QuadroEntity quadro = buscarQuadroPorId(id);
         quadro.setNome(novoNome);
 
         salvarDados();
@@ -571,8 +579,13 @@ public class KanbanModel implements Serializable {
     public void deletarQuadro(int id) {
         validarTimeSelecionado();
 
-        BoardEntity quadro = buscarQuadroPorId(id);
-        timeSelecionado.getBoards().remove(quadro);
+        QuadroEntity quadro = buscarQuadroPorId(id);
+        if(quadro != null && usuarioLogado != null) {
+            if(!timeSelecionado.getOwner().equals(usuarioLogado)) {
+                throw new IllegalStateException("Apenas o lider pode deletar o quadro!");
+            }
+            timeSelecionado.getBoards().remove(quadro);
+        }
 
         if (quadroSelecionado != null && quadroSelecionado.getId() == id) {
             quadroSelecionado = null;
@@ -597,7 +610,7 @@ public class KanbanModel implements Serializable {
     public String[] consultarQuadro(int id) {
         validarTimeSelecionado();
 
-        BoardEntity quadro = buscarQuadroPorId(id);
+        QuadroEntity quadro = buscarQuadroPorId(id);
         return new String[]{
                 "ID: " + quadro.getId(),
                 "Nome: " + quadro.getNome(),
@@ -606,7 +619,7 @@ public class KanbanModel implements Serializable {
         };
     }
 
-    public BoardEntity buscarQuadroPorId(int id) {
+    public QuadroEntity buscarQuadroPorId(int id) {
         if (timeSelecionado == null) {
             throw new IllegalStateException("Nenhum time selecionado.");
         }
@@ -624,12 +637,12 @@ public class KanbanModel implements Serializable {
     public void selecionarColuna(int idColuna) {
         validarQuadroSelecionado();
 
-        ColumnEntity coluna = buscarColunaPorId(idColuna);
+        ColunaEntity coluna = buscarColunaPorId(idColuna);
         this.colunaSelecionada = coluna;
         notifica();
     }
 
-    public ColumnEntity getColunaSelecionada() {
+    public ColunaEntity getColunaSelecionada() {
         return colunaSelecionada;
     }
 
@@ -639,7 +652,7 @@ public class KanbanModel implements Serializable {
 
         int maiorId = 0;
         if (quadroSelecionado != null) {
-            for (ColumnEntity c : quadroSelecionado.getColunas()) {
+            for (ColunaEntity c : quadroSelecionado.getColunas()) {
                 if (c == null) continue;
 
                 if (c.getId() > maiorId) {
@@ -658,7 +671,7 @@ public class KanbanModel implements Serializable {
         validarQuadroSelecionado();
         validarParametro(novoNome, "Nome da coluna");
 
-        ColumnEntity coluna = buscarColunaPorId(idColuna);
+        ColunaEntity coluna = buscarColunaPorId(idColuna);
 
         // Atualiza o status de todos os cards da coluna antiga
         String nomeAntigo = coluna.getName();
@@ -682,7 +695,7 @@ public class KanbanModel implements Serializable {
             throw new IllegalStateException("Não é possível deletar a última coluna.");
         }
 
-        ColumnEntity coluna = buscarColunaPorId(idColuna);
+        ColunaEntity coluna = buscarColunaPorId(idColuna);
         String nomeColuna = coluna.getName();
 
         // Move todos os cards para a primeira coluna
@@ -718,7 +731,7 @@ public class KanbanModel implements Serializable {
                 .toArray(String[]::new);
     }
 
-    public ColumnEntity buscarColunaPorId(int id) {
+    public ColunaEntity buscarColunaPorId(int id) {
         if (quadroSelecionado == null) {
             throw new IllegalStateException("Nenhum quadro selecionado.");
         }
@@ -735,7 +748,7 @@ public class KanbanModel implements Serializable {
         }
 
         // 1. Busca a coluna
-        ColumnEntity col = quadroSelecionado.getColunas().stream()
+        ColunaEntity col = quadroSelecionado.getColunas().stream()
                 .filter(c -> c.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Coluna não encontrada."));
@@ -856,7 +869,7 @@ public class KanbanModel implements Serializable {
 
         CardEntity card = buscarCardPorId(idCard);
         List<String> nomesColunas = quadroSelecionado.getColunas().stream()
-                .map(ColumnEntity::getName)
+                .map(ColunaEntity::getName)
                 .collect(Collectors.toList());
 
         int indexAtual = nomesColunas.indexOf(card.getStatus());
@@ -877,7 +890,7 @@ public class KanbanModel implements Serializable {
         validarQuadroSelecionado();
 
         CardEntity card = buscarCardPorId(idCard);
-        ColumnEntity coluna = buscarColunaPorId(idColuna);
+        ColunaEntity coluna = buscarColunaPorId(idColuna);
 
         card.setStatus(coluna.getName().toUpperCase());
         salvarDados();
@@ -908,9 +921,9 @@ public class KanbanModel implements Serializable {
 
         List<String> relatorio = new ArrayList<>();
 
-        for (ColumnEntity coluna : quadroSelecionado.getColunas()) {
+        for (ColunaEntity coluna : quadroSelecionado.getColunas()) {
             String nomeColuna = coluna.getName();
-            relatorio.add("--- " + nomeColuna + " ---");
+            relatorio.add("--- " + "(" + coluna.getId() + ")" + " " +  nomeColuna + " ---");
 
             List<CardEntity> cardsNaColuna = quadroSelecionado.getCards().stream()
                     .filter(c -> c.getStatus().equals(nomeColuna))
@@ -918,7 +931,7 @@ public class KanbanModel implements Serializable {
                     .collect(Collectors.toList());
 
             if (cardsNaColuna.isEmpty()) {
-                relatorio.add("Vazio");
+                relatorio.add("  Vazio");
             } else {
                 for (CardEntity card : cardsNaColuna) {
                     relatorio.add(card.toString());
@@ -940,7 +953,7 @@ public class KanbanModel implements Serializable {
         List<String> relatorio = new ArrayList<>();
 
         // Busca a coluna
-        ColumnEntity coluna = quadroSelecionado.getColunas()
+        ColunaEntity coluna = quadroSelecionado.getColunas()
                 .stream()
                 .filter(c -> c.getId() == colId)
                 .findFirst()
@@ -1027,7 +1040,7 @@ public class KanbanModel implements Serializable {
         }
     }
 
-    private void validarPermissaoLider(TeamEntity time) {
+    private void validarPermissaoLider(TimeEntity time) {
         if (!time.getOwner().equals(usuarioLogado)) {
             throw new IllegalStateException("Apenas o líder pode realizar esta ação.");
         }
@@ -1066,7 +1079,7 @@ public class KanbanModel implements Serializable {
 
             stats.add("");
             stats.add("--- Por Coluna ---");
-            for (ColumnEntity col : quadroSelecionado.getColunas()) {
+            for (ColunaEntity col : quadroSelecionado.getColunas()) {
                 long count = quadroSelecionado.getCards().stream()
                         .filter(c -> c.getStatus().equals(col.getName()))
                         .count();
@@ -1127,7 +1140,7 @@ public class KanbanModel implements Serializable {
         return new ArrayList<>(usuarios);
     }
 
-    public List<TeamEntity> getTimes() {
+    public List<TimeEntity> getTimes() {
         return new ArrayList<>(times);
     }
 

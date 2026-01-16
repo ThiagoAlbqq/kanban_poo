@@ -1,6 +1,7 @@
 package view;
 
 import controller.TelaInicialController;
+import models.CancelarException;
 import models.KanbanModel;
 
 public class TelaInicialView implements Observer {
@@ -30,19 +31,25 @@ public class TelaInicialView implements Observer {
 
             Prompt.menuItem("1", "Login");
             Prompt.menuItem("2", "Criar Conta");
+            Prompt.menuItem("3", "Gerar Relatorio Completo");
             Prompt.separator();
             Prompt.menuItem("0", "Voltar / Sair");
 
             System.out.println();
 
-            String op = Prompt.input("Escolha uma opção");
+            try {
+                String op = Prompt.input("Escolha uma opção");
 
-            if (op.equals("0")) {
+                if (op.equals("0")) {
+                    sair = true;
+                } else {
+                    controller.handleEvent(op);
+                }
+
+            } catch (CancelarException e) {
+                // CORREÇÃO: Se digitar "sair", cai aqui e encerra o loop graciosamente
+                Prompt.success("Saindo do sistema...");
                 sair = true;
-            } else {
-                controller.handleEvent(op);
-                System.out.println("\nPressione Enter para continuar...");
-                Prompt.scanner.nextLine();
             }
 
         } while (!sair);

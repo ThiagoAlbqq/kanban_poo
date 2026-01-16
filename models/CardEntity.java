@@ -52,9 +52,10 @@ public class CardEntity implements Serializable {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM HH:mm");
 
         return String.format(
-                "  [Card #%d] %s | Prioridade: %s | Resp: %s | Criado em: %s",
+                "  [Card #%d] %s | Desc: %s | Prioridade: %s | Resp: %s | Criado em: %s",
                 id,
                 title,
+                description,
                 priority,
                 (assignee != null ? assignee.getUsername() : "Ninguém"),
                 createdAt.format(fmt)

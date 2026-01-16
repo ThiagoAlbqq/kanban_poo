@@ -3,6 +3,7 @@ package controller;
 import models.KanbanModel;
 import view.*;
 import view.usuario.CadastroUsuarioView;
+import view.usuario.LoginView;
 
 public class TelaInicialController implements Observer {
     private KanbanModel model;
@@ -22,6 +23,8 @@ public class TelaInicialController implements Observer {
             case "2":
                 new CadastroUsuarioView().init(model);
                 break;
+                case "3":
+                    new GerarRelatorioCompletoView().init(model);
             case "0":
                 view.mensagem("Saindo...");
                 System.exit(0);

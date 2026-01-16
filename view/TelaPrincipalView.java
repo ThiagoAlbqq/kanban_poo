@@ -23,8 +23,8 @@ public class TelaPrincipalView implements Observer {
             Prompt.clear();
 
             String nomeUsuario = "Usuário";
-            if (model.getUsuarioLogado() != null) {
-                nomeUsuario = model.getUsuarioLogado().getUsername();
+            if (model.getUsuarioLogadoString() != null) {
+                nomeUsuario = model.getUsuarioLogadoString()[1];
             }
 
             Prompt.header("Dashboard de " + nomeUsuario);

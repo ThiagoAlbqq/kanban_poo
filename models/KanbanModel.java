@@ -283,6 +283,15 @@ public class KanbanModel implements Serializable {
     // ==================================================================================
 
     public void selecionarTime(int idTime) {
+
+        if(idTime == -1) {
+            this.timeSelecionado = null;
+            this.quadroSelecionado = null;
+            this.cardSelecionado = null;
+            this.colunaSelecionada = null;
+            return;
+        }
+
         validarUsuarioLogado();
 
         TeamEntity time = buscarTimePorId(idTime);

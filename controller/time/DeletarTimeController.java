@@ -10,8 +10,6 @@ public class DeletarTimeController implements Observer {
     private KanbanModel model;
     private DeletarTimeView view;
 
-    private int id;
-
     public void init(KanbanModel model, DeletarTimeView view) {
         if (model != null && view != null) {
             this.model = model;
@@ -21,14 +19,9 @@ public class DeletarTimeController implements Observer {
     }
 
     public void deletar() {
-        view.solicitarId();
-
         try {
-            this.id = view.getId();
-
-            model.deletarTime(id);
+            model.deletarTime();
             view.sucessMensage("Time deletado com sucesso!");
-            new TelaPrincipalView().init(model);
         } catch (RuntimeException e) {
             view.failMensage("Erro: " + e.getMessage());
         }

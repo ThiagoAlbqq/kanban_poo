@@ -10,7 +10,6 @@ public class EditarTimeController implements Observer {
     private KanbanModel model;
     private EditarTimeView view;
 
-    private int id;
     private String novoNome;
 
     public void init(KanbanModel model, EditarTimeView view) {
@@ -22,14 +21,12 @@ public class EditarTimeController implements Observer {
     }
 
     public void editar() {
-        view.solicitarId();
         view.solicitarNome();
 
         try {
-            this.id = view.getId();
             this.novoNome = view.getNome();
 
-            model.editarTime(id, novoNome);
+            model.editarTime(novoNome);
 
             view.sucessMensage("Edição efetuada com sucesso!");
 

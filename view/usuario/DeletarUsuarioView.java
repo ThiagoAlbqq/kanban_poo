@@ -25,7 +25,7 @@ public class DeletarUsuarioView implements Observer {
     }
 
     public void solicitarId() {
-        id = Prompt.inputInt("Id");
+        id = Prompt.inputInt("ID");
     }
 
     public int getId() { return id; }

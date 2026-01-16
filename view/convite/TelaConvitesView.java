@@ -23,13 +23,11 @@ public class TelaConvitesView implements Observer {
     public void mensagemSucesso(String msg) {
         System.out.println("");
         Prompt.success(msg);
-        try { Thread.sleep(1500); } catch (InterruptedException e) {}
     }
 
     public void mensagemErro(String msg) {
         System.out.println("");
         Prompt.error(msg);
-        try { Thread.sleep(1500); } catch (InterruptedException e) {}
     }
 
     public void mostrarMenu() {

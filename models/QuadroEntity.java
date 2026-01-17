@@ -74,6 +74,21 @@ public class QuadroEntity implements Serializable {
         colunas.add(new ColunaEntity(id, nome));
     }
 
+    public void removeColuna(ColunaEntity coluna) {
+        if (coluna == null) {
+            throw new IllegalArgumentException("Não é possível remover uma coluna nula.");
+        }
+
+        // Regra de segurança: Não deixa apagar a última coluna do quadro
+        if (colunas.size() <= 1) {
+            throw new IllegalStateException("O quadro precisa ter pelo menos uma coluna.");
+        }
+
+        if (!colunas.remove(coluna)) {
+            throw new IllegalStateException("Coluna não encontrada neste quadro.");
+        }
+    }
+
     public ColunaEntity getColunaPorNome(String nome) {
         return colunas.stream()
                 .filter(c -> c.getName().equalsIgnoreCase(nome))

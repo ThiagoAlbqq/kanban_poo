@@ -9,8 +9,6 @@ public class DeletarQuadroController implements Observer {
     private KanbanModel model;
     private DeletarQuadroView view;
 
-    private int id;
-
     public void init(KanbanModel model, DeletarQuadroView view) {
         if (model != null && view != null) {
             this.model = model;
@@ -20,16 +18,17 @@ public class DeletarQuadroController implements Observer {
     }
 
     public void deletar() {
-        view.solicitarId();
-
         try {
-            this.id = view.getId();
-
-            model.deletarQuadro(id);
-            view.sucessMensage("Time deletado com sucesso!");
-
+            model.deletarQuadro();
+            view.mostrarMensagemSucesso("Quadro deletado com sucesso!");
         } catch (RuntimeException e) {
-            view.failMensage("Erro: " + e.getMessage());
+            String msg = e.getMessage();
+            if (msg == null) {
+                e.printStackTrace();
+                view.mostrarMensagemErro("Erro inesperado (NullPointer). Verifique o console.");
+            } else {
+                view.mostrarMensagemErro("Erro: " + msg);
+            }
         }
     }
 

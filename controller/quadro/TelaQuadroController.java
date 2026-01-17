@@ -5,6 +5,7 @@ import view.Observer;
 import view.card.DeletarCardView;
 import view.card.EditarCardView;
 import view.coluna.DeletarColunaView;
+import view.quadro.DeletarQuadroView;
 import view.quadro.GerarEstatisticasQuadroView;
 import view.quadro.TelaQuadroView;
 import view.card.CadastroCardView;
@@ -50,6 +51,10 @@ public class TelaQuadroController implements Observer {
 
             case "7":
                 new GerarEstatisticasQuadroView().init(model);
+                break;
+
+            case "8":
+                new DeletarQuadroView().init(model);
                 break;
 
             default:

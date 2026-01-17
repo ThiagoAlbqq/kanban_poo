@@ -45,7 +45,7 @@ public class DashboardTimeView implements Observer {
 
             Prompt.separator();
 
-            System.out.println("[N] Novo Quadro | [RQ] Remover Quadro | [E] Editar Nome | [R] Remover Time | [C] Convidar Membro");
+            System.out.println("[N] Novo Quadro | [E] Editar Nome | [R] Remover Time | [C] Convidar Membro");
             System.out.println("[0] Voltar");
 
             System.out.println();

@@ -28,6 +28,11 @@ public class TelaQuadroView implements Observer {
         boolean sair = false;
 
         do {
+            if (model.getQuadroSelecionado() == null) {
+                sair = true;
+                continue;
+            }
+
             Prompt.clear();
 
             String nomeQuadro = (model.getQuadroSelecionado() != null)
@@ -42,7 +47,7 @@ public class TelaQuadroView implements Observer {
             System.out.println(" [1] Novo Card    | [2] Mover Card | [3] Editar Card  | [4] Excluir Card\n");
 
             System.out.println(" -- ESTRUTURA --");
-            System.out.println(" [5] Nova Coluna  | [6] Excluir Coluna | [7] Relatório\n");
+            System.out.println(" [5] Nova Coluna  | [6] Excluir Coluna | [7] Relatório  | [8] Remover Quadro\n");
             System.out.println(" [0] Voltar");
 
             System.out.println();

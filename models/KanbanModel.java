@@ -444,20 +444,19 @@ public class KanbanModel implements Serializable {
         notifica();
     }
 
-    public void deletarQuadro(int id) {
+    public void deletarQuadro() {
         validarTimeSelecionado();
-        QuadroEntity quadro = buscarQuadroPorId(id);
+        validarQuadroSelecionado();
 
-        if(quadro != null && usuarioLogado != null) {
-            if(!timeSelecionado.getOwner().equals(usuarioLogado)) throw new IllegalStateException("Apenas líder deleta quadro.");
-            timeSelecionado.getBoards().remove(quadro);
+        if (!timeSelecionado.getOwner().equals(usuarioLogado)) {
+            throw new IllegalStateException("Apenas o líder pode deletar o quadro.");
         }
+        timeSelecionado.removeBoard(quadroSelecionado);
+        // --------------------------
 
-        if (quadroSelecionado != null && quadroSelecionado.getId() == id) {
-            quadroSelecionado = null;
-            cardSelecionado = null;
-            colunaSelecionada = null;
-        }
+        this.quadroSelecionado = null;
+        this.cardSelecionado = null;
+        this.colunaSelecionada = null;
 
         salvarDados();
         notifica();
@@ -536,12 +535,11 @@ public class KanbanModel implements Serializable {
         String nomeColuna = coluna.getName();
         String primeiraColuna = quadroSelecionado.getColunas().get(0).getName();
 
-        // Move cards da coluna deletada para a primeira disponível
         for (CardEntity card : quadroSelecionado.getCards()) {
             if (card.getStatus().equals(nomeColuna)) card.setStatus(primeiraColuna);
         }
 
-        quadroSelecionado.getColunas().remove(coluna);
+        quadroSelecionado.removeColuna(coluna);
         if (colunaSelecionada != null && colunaSelecionada.getId() == idColuna) colunaSelecionada = null;
 
         salvarDados();
@@ -610,7 +608,7 @@ public class KanbanModel implements Serializable {
         CardEntity novo = new CardEntity(
                 quadroSelecionado.getCards().size() + 1,
                 titulo, descricao, prioridade,
-                quadroSelecionado.getColunas().get(0).getName() // Padrão: 1ª coluna
+                quadroSelecionado.getColunas().get(0).getName()
         );
         novo.setAssignee(usuarioLogado);
 

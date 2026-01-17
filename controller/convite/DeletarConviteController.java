@@ -3,7 +3,6 @@ package controller.convite;
 import models.KanbanModel;
 import view.Observer;
 import view.convite.DeletarConviteView;
-import view.quadro.DeletarQuadroView;
 
 public class DeletarConviteController implements Observer {
 

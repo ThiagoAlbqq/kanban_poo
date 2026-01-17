@@ -1,7 +1,6 @@
 package view.card;
 
 import controller.card.ListarCardController;
-import controller.quadro.ListarQuadroController;
 import models.KanbanModel;
 import view.Observer;
 import view.Prompt;

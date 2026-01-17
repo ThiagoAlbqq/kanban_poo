@@ -1,10 +1,8 @@
 package controller.convite;
 
-import models.ConviteEntity;
 import models.KanbanModel;
 import view.Observer;
 import view.convite.ListarConviteView;
-import view.convite.TelaConvitesView;
 
 public class ListarConviteController implements Observer {
 

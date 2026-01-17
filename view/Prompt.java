@@ -1,37 +1,30 @@
 package view;
 
 import models.CancelarException;
-
 import java.util.Scanner;
 
 public class Prompt {
 
+    // Cores pra deixar o terminal mais visual
     private static final String RESET = "\u001B[0m";
     private static final String CYAN = "\u001B[36m";
     private static final String GREEN = "\u001B[32m";
-    private static final String YELLOW = "\u001B[33m";
     private static final String RED = "\u001B[31m";
     private static final String BOLD = "\u001B[1m";
 
     public static final Scanner scanner = new Scanner(System.in);
 
+    // Tenta limpar o console
     public static void clear() {
         try {
-            String sistema = System.getProperty("os.name").toLowerCase();
-
-            if (sistema.contains("win")) {
-                new ProcessBuilder("cmd", "/c", "cls")
-                        .inheritIO()
-                        .start()
-                        .waitFor();
+            if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
                 System.out.print("\033[H\033[2J");
                 System.out.flush();
             }
-        } catch (Exception excecao) {
-            for (int i = 0; i < 50; i++) {
-                System.out.println();
-            }
+        } catch (Exception e) {
+            System.out.println("\n".repeat(50));
         }
     }
 
@@ -51,60 +44,58 @@ public class Prompt {
 
     public static String input(String texto) {
         System.out.print(BOLD + "> " + texto + ": " + RESET);
+        String entrada = scanner.nextLine().trim();
 
-        String input = scanner.nextLine().trim();
-
-        if (input.equalsIgnoreCase("sair")) {
+        // Atalho de fuga em qualquer momento do sistema
+        if (entrada.equalsIgnoreCase("sair")) {
             throw new CancelarException();
         }
-
-        return input;
+        return entrada;
     }
 
+    // Garante que o usuário digite um número
     public static int inputInt(String texto) {
-        System.out.print(BOLD + "> " + texto + ": " + RESET);
-
-        String input = scanner.nextLine().trim();
-
-        if (input.equalsIgnoreCase("sair")) {
-            throw new CancelarException();
-        }
-
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            return -1;
+        while (true) {
+            String entrada = input(texto);
+            try {
+                return Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println(RED + "Digite um número válido." + RESET);
+            }
         }
     }
 
     public static void success(String msg) {
         System.out.println(GREEN + "✔ " + msg + RESET);
-        System.out.println("Pressione Enter para continuar...");
-        scanner.nextLine();
+        aguardarEnter();
     }
 
     public static void error(String msg) {
         System.out.println(RED + "✖ " + msg + RESET);
+        aguardarEnter();
+    }
+
+    // Pausa pro usuário ler o que aconteceu antes de limpar a tela
+    private static void aguardarEnter() {
         System.out.println("Pressione Enter para continuar...");
         scanner.nextLine();
     }
 
+    // Usariamos isso no convite
     public static boolean confirm(String pergunta) {
         while (true) {
             System.out.print(CYAN + "? " + RESET + BOLD + pergunta + RESET + " (Y/n) ");
+            String entrada = scanner.nextLine().trim().toLowerCase();
 
-            String input = scanner.nextLine().trim().toLowerCase();
+            if (entrada.equalsIgnoreCase("sair")) throw new CancelarException();
 
-            if (input.equalsIgnoreCase("sair")) {
-                throw new CancelarException();
-            }
-
-            if (input.isEmpty() || input.equals("y") || input.equals("s")) {
+            // Enter vazio conta como Sim (padrão de CLI)
+            if (entrada.isEmpty() || entrada.equals("y") || entrada.equals("s")) {
                 return true;
-            } else if (input.equals("n")) {
+            } else if (entrada.equals("n")) {
                 return false;
             }
-
+            // Se digitar outra coisa, o loop roda de novo
         }
     }
 }

@@ -27,6 +27,8 @@ public class TelaInicialView implements Observer {
         boolean sair = false;
 
         do {
+            Prompt.clear();
+
             Prompt.header("DANDANDAN-KANBAN");
 
             Prompt.menuItem("1", "Login");

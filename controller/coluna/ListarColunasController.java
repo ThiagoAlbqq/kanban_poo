@@ -3,7 +3,6 @@ package controller.coluna;
 import models.KanbanModel;
 import view.Observer;
 import view.coluna.ListarColunasView;
-import view.time.ListarTimesView;
 
 public class ListarColunasController implements Observer {
 

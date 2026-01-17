@@ -10,13 +10,10 @@ import java.util.Scanner;
 
 public class CadastroTimeView implements Observer {
 
-
     private String nome;
-    private String opcao = "0";
 
     private KanbanModel model;
     private CadastroTimeController controller;
-    public Scanner sc = Input.scanner;
 
     public void init(KanbanModel model) {
         if (model != null) {

@@ -6,7 +6,6 @@ import view.Observer;
 
 public class EditarTimeController implements Observer {
 
-
     private KanbanModel model;
     private EditarTimeView view;
 

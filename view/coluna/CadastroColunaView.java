@@ -1,6 +1,5 @@
 package view.coluna;
 
-import controller.card.CadastroCardController;
 import controller.coluna.CadastroColunaController;
 import models.KanbanModel;
 import view.Observer;

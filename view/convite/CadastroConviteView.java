@@ -1,7 +1,6 @@
 package view.convite;
 
 import controller.convite.CadastroConviteController;
-import controller.quadro.CadastroQuadroController;
 import models.KanbanModel;
 import view.Observer;
 import view.Prompt;
@@ -9,7 +8,6 @@ import view.Prompt;
 public class CadastroConviteView implements Observer {
 
     private String email;
-    private String opcao = "0";
 
     private KanbanModel model;
     private CadastroConviteController controller;

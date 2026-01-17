@@ -1,7 +1,6 @@
 package view.convite;
 
 import controller.convite.DeletarConviteController;
-import controller.quadro.DeletarQuadroController;
 import models.KanbanModel;
 import view.Observer;
 import view.Prompt;

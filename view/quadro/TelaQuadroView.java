@@ -68,6 +68,5 @@ public class TelaQuadroView implements Observer {
 
     @Override
     public void update() {
-        // O loop cuida de atualizar a tela
     }
 }

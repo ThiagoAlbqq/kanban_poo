@@ -8,7 +8,6 @@ import view.Prompt;
 public class CadastroQuadroView implements Observer {
 
     private String nome;
-    private String opcao = "0";
 
     private KanbanModel model;
     private CadastroQuadroController controller;
@@ -26,7 +25,7 @@ public class CadastroQuadroView implements Observer {
 
     public void solicitarNome() {
         Prompt.header("DANDANDAN-KANBAN : Criar Quadro");
-        nome = Prompt.input("Nome do Quadro: ");
+        nome = Prompt.input("Nome do Quadro");
     }
     public String getNome() { return nome; }
 

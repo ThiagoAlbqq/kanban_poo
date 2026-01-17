@@ -3,7 +3,6 @@ package controller.card;
 import models.KanbanModel;
 import view.Observer;
 import view.card.ListarCardView;
-import view.quadro.ListarQuadrosView;
 
 public class ListarCardController implements Observer {
 

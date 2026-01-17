@@ -34,6 +34,12 @@ public class EditarCardController implements Observer {
             this.desc = view.getDesc();
             this.prioOp = view.getPrioOp();
 
+            while(prioOp < 0 || prioOp > 3) {
+                view.failMensage("Escolha um id valido");
+                view.solicitarPrioridade();
+                this.prioOp = view.getPrioOp();
+            }
+
             CardPriority prio = null;
             if(prioOp != 0) {
                 prio = CardPriority.MEDIA;

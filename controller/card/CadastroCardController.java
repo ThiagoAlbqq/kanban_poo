@@ -39,6 +39,12 @@ public class CadastroCardController implements Observer {
             this.desc = view.getDesc();
             this.prioOp = view.getPrioOp();
 
+            while(prioOp < 0 || prioOp > 3) {
+                view.failMensage("Escolha um id valido");
+                view.solicitarPrioridade();
+                this.prioOp = view.getPrioOp();
+            }
+
             CardPriority prio = CardPriority.MEDIA;
             if(prioOp == 1) prio = CardPriority.BAIXA;
             if(prioOp == 3) prio = CardPriority.ALTA;

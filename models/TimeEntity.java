@@ -127,6 +127,12 @@ public class TimeEntity implements Serializable {
         return Collections.unmodifiableList(boards);
     }
 
+    public void removeBoard(QuadroEntity quadro) {
+        if (this.boards != null) {
+            this.boards.remove(quadro);
+        }
+    }
+
     public void addBoard(QuadroEntity board) {
         if (board == null) {
             throw new IllegalArgumentException("Quadro inválido.");

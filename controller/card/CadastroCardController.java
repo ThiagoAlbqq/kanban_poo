@@ -4,7 +4,6 @@ import models.CardPriority;
 import models.KanbanModel;
 import view.card.CadastroCardView;
 import view.Observer;
-import view.coluna.ListarColunaView;
 import view.coluna.ListarColunasView;
 
 public class CadastroCardController implements Observer {

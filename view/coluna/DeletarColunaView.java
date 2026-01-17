@@ -1,6 +1,5 @@
 package view.coluna;
 
-import controller.card.DeletarCardController;
 import controller.coluna.DeletarColunaController;
 import models.KanbanModel;
 import view.Observer;
@@ -25,7 +24,7 @@ public class DeletarColunaView implements Observer {
     }
 
     public void solicitarId() {
-        id = Prompt.inputInt("Id");
+        id = Prompt.inputInt("ID");
     }
 
     public int getId() { return id; }

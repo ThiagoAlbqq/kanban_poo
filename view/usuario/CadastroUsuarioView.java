@@ -34,7 +34,7 @@ public class CadastroUsuarioView implements Observer {
     }
 
     public void solicitarEmail() {
-        email = Prompt.input("Email do Conta");
+        email = Prompt.input("Email da Conta");
     }
 
     public void solicitarSenha() {

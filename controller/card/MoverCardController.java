@@ -21,35 +21,27 @@ public class MoverCardController implements Observer {
 
     public void moverCard() {
         try {
-            // PASSO 1: Solicitar ID do Card
             view.solicitarIdCard();
             int idCard = view.getIdCard();
 
-            // VERIFICAÇÃO: O Card existe?
-            // (Você precisará de um método no Model que retorne o Card ou null)
             CardEntity card = model.buscarCardPorId(idCard);
 
             if (card == null) {
                 view.failMensage("Card com ID " + idCard + " não encontrado.");
-                return; // Para aqui
+                return;
             }
 
-            // PASSO 2: Preparar o terreno
-            // Pega as colunas para mostrar as opções (ex: "1 - A Fazer", "2 - Doing")
             String[] listaColunas = model.listarColunas();
 
-            // PASSO 3: Mostrar contexto na View
             view.mostrarContextoDeMovimentacao(
                     card.getTitle(),
                     card.getStatus(),
                     listaColunas
             );
 
-            // PASSO 4: Solicitar Destino
             view.solicitarIdColuna();
             int idColunaDestino = view.getIdColuna();
 
-            // PASSO 5: Executar
             model.moverCardParaColuna(idCard, idColunaDestino);
             view.sucessMensage("Card '" + card.getTitle() + "' movido com sucesso!");
 

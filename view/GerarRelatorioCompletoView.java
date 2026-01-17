@@ -1,7 +1,6 @@
 package view;
 
 import controller.GerarRelatorioCompletoController;
-import controller.quadro.GerarEstatisticasQuadroController;
 import models.KanbanModel;
 
 public class GerarRelatorioCompletoView implements Observer {

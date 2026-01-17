@@ -3,7 +3,7 @@ package view.card;
 import controller.card.MoverCardController;
 import models.KanbanModel;
 import view.Observer;
-import view.Prompt; // Seu utilitário
+import view.Prompt;
 
 public class MoverCardView implements Observer {
 
@@ -17,21 +17,18 @@ public class MoverCardView implements Observer {
             controller = new MoverCardController();
             controller.init(model, this);
             model.attachObserver(this);
-            // Inicia o fluxo
             controller.moverCard();
         }
     }
 
     public void solicitarIdCard() {
         Prompt.header("MOVER CARD");
-        // Se o usuário digitar 'sair', o Prompt lança a Exception que o controller captura
         idCard = Prompt.inputInt("Digite o ID do Card");
     }
 
-    // NOVO: Mostra o card selecionado e as opções de destino
     public void mostrarContextoDeMovimentacao(String tituloCard, String colunaAtual, String[] colunasDisponiveis) {
         System.out.println("");
-        System.out.println("   » Card Selecionado: \u001B[33m" + tituloCard + "\u001B[0m"); // Amarelo
+        System.out.println("   » Card Selecionado: \u001B[33m" + tituloCard + "\u001B[0m");
         System.out.println("   » Origem Atual: " + colunaAtual);
         System.out.println("");
         System.out.println("--- PARA QUAL COLUNA? ---");

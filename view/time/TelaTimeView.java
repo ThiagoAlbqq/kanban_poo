@@ -29,7 +29,6 @@ public class TelaTimeView implements Observer {
             Prompt.clear();
             Prompt.header("MEUS TIMES");
 
-            // LISTA OS TIMES PARA O USUÁRIO ESCOLHER
             listarTimes();
 
             Prompt.separator();
@@ -50,7 +49,6 @@ public class TelaTimeView implements Observer {
     }
 
     private void listarTimes() {
-        // Seu model deve retornar algo como ["1 - Time A", "2 - Time B"]
         String[] times = model.listarMeusTimes();
 
         if (times == null || times.length == 0) {
@@ -64,6 +62,5 @@ public class TelaTimeView implements Observer {
 
     @Override
     public void update() {
-        // Atualiza caso a lista mude
     }
 }

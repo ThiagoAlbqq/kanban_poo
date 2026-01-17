@@ -3,7 +3,6 @@ package models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardEntity implements Serializable {
 
@@ -14,38 +13,105 @@ public class CardEntity implements Serializable {
     private LocalDateTime createdAt;
 
     private UsuarioEntity assignee;
-
     private CardPriority priority;
 
     public CardEntity(int id, String title, String description, CardPriority priority, String status) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("ID do card deve ser positivo.");
+        }
+
         this.id = id;
-        this.title = title;
-        this.description = description;
-        this.priority = priority != null ? priority : CardPriority.MEDIA;
-        this.status = status;
         this.createdAt = LocalDateTime.now();
+
+        setTitle(title);
+        setDescription(description);
+        setPriority(priority);
+        setStatus(status);
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    /* ================= TITLE ================= */
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setTitle(String title) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Título do card não pode ser vazio.");
+        }
 
-    public UsuarioEntity getAssignee() { return assignee; }
+        if (title.length() > 50) {
+            throw new IllegalArgumentException("Título do card não pode exceder 50 caracteres.");
+        }
+
+        this.title = title.trim();
+    }
+
+    /* ================= DESCRIPTION ================= */
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        if (description == null) {
+            this.description = "";
+            return;
+        }
+
+        if (description.length() > 255) {
+            throw new IllegalArgumentException("Descrição do card não pode exceder 255 caracteres.");
+        }
+
+        this.description = description.trim();
+    }
+
+    /* ================= STATUS ================= */
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        if (status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Status do card não pode ser vazio.");
+        }
+
+        this.status = status.trim().toUpperCase();
+    }
+
+    /* ================= ASSIGNEE ================= */
+
+    public UsuarioEntity getAssignee() {
+        return assignee;
+    }
+
     public void setAssignee(UsuarioEntity assignee) {
         this.assignee = assignee;
+        // null é permitido → card sem responsável
     }
 
-    public CardPriority getPriority() { return priority; }
-    public void setPriority(CardPriority priority) { this.priority = priority; }
+    /* ================= PRIORITY ================= */
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public CardPriority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(CardPriority priority) {
+        this.priority = (priority != null) ? priority : CardPriority.MEDIA;
+    }
+
+    /* ================= CREATED AT ================= */
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /* ================= TO STRING ================= */
 
     @Override
     public String toString() {

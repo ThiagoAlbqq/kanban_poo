@@ -4,7 +4,6 @@ import models.KanbanModel;
 import view.Observer;
 import view.time.CadastroTimeView;
 import view.time.DashboardTimeView;
-import view.time.ListarTimesView;
 import view.time.TelaTimeView;
 
 public class TelaTimeController implements Observer {
@@ -34,7 +33,7 @@ public class TelaTimeController implements Observer {
     }
 
     public void sair() {
-        model.selecionarTime(-1); // Limpa seleção
+        model.selecionarTime(-1);
     }
 
     @Override

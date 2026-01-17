@@ -37,7 +37,7 @@ public class TelaConvitesView implements Observer {
             Prompt.clear();
             Prompt.header("NOTIFICAÇÕES & CONVITES");
 
-            listarConvites(); // <--- AQUI VAI A LÓGICA DE PARSEAR A STRING
+            listarConvites();
 
             Prompt.separator();
             System.out.println("[0] Voltar");
@@ -55,9 +55,7 @@ public class TelaConvitesView implements Observer {
         } while (!sair);
     }
 
-    // --- ADAPTADO PARA O SEU MODEL ---
     private void listarConvites() {
-        // Seu model retorna: "ID#NOME_TIME#REMETENTE"
         String[] convitesRaw = model.verificarMeusConvites();
 
         if (convitesRaw == null || convitesRaw.length == 0) {
@@ -65,12 +63,8 @@ public class TelaConvitesView implements Observer {
         } else {
             for (String c : convitesRaw) {
                 try {
-                    // Quebra a string nos separadores #
                     String[] partes = c.split("#");
-                    // partes[0] = ID, partes[1] = Time, partes[2] = Email
-
                     System.out.printf("   [%s] Convite: Time '%s' (De: %s)%n", partes[0], partes[1], partes[2]);
-
                 } catch (Exception e) {
                     System.out.println("   [Erro de formatação]: " + c);
                 }
